@@ -1,0 +1,11 @@
+
+
+# node modules yo
+node_modules/
+
+# some of the settings yo!
+prisma.yml
+*.prisma
+
+# env stuffs
+.env

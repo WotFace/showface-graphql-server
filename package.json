@@ -1,0 +1,19 @@
+{
+  "name": "prisma-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^6.0.0",
+    "graphql": "^14.0.2",
+    "graphql-yoga": "^1.16.2",
+    "lodash": "^4.17.11",
+    "prisma-client-lib": "^1.17.1"
+  }
+}

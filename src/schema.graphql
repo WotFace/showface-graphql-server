@@ -1,0 +1,127 @@
+scalar DateTime
+
+type Query {
+  user(auth: AuthInput!): User!
+  show(auth: AuthInput!, where: ShowQueryInput!): Show!
+  userShows(auth: AuthInput!, first: Int, skip: Int): [Show!]!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): Result!
+  editUserSettings(auth: AuthInput!, data: EditUserSettingsInput!): Result!
+  createNewShow(auth: AuthInput!, data: CreateNewShowInput!): Show!
+  editShowSettings(auth: AuthInput!, data: EditShowSettingsInput!): Result!
+  deleteShow(auth: AuthInput!, data: DeleteShowInput!): Result!
+  editShowRespondentStatus(auth: AuthInput!, data: EditShowRespondentStatusInput!): Result!
+  addRespondents(auth: AuthInput!, data: AddRespondentsInput!): Result! #done but with some doubts
+  deleteRespondents(auth: AuthInput!, data: DeleteRespondentsInput!): Result! 
+  createOrEditResponse(auth: AuthInput!, data: CreateOrEditResponseInput!): Result! #done with some doubts
+  deleteResponse(auth: AuthInput!, data: DeleteResponseInput!): Result!
+}
+
+input ShowQueryInput {
+  slug: String!
+}
+
+input EditShowRespondentStatusInput {
+  slug: String!
+  email: String!
+  role: String!
+}
+
+input EditUserSettingsInput {
+  name: String
+  isPremium: Boolean
+}
+
+input CreateUserInput {
+  uid: String!
+  email: String!
+  name: String!
+}
+
+input DeleteRespondentsInput {
+  slug: String!
+  respondentEmails: [String!]!
+}
+
+input AddRespondentsInput {
+  slug: String!
+  respondentDetails: [RespondentDetails!]!
+}
+
+input RespondentDetails {
+  respondentEmail: String!
+  respondentRole: String!
+}
+
+input CreateOrEditResponseInput {
+  slug: String!
+  response: [DateTime!]
+}
+
+input DeleteResponseInput {
+  slug: String!
+  email: String!
+}
+
+input AuthInput {
+  token: String!
+  uid: String!
+}
+
+input CreateNewShowInput {
+  name: String!
+  isPrivate: Boolean
+  isAnonymous: Boolean
+  startDate: DateTime!
+  endDate: DateTime!
+}
+
+input EditShowSettingsInput {
+  slug: String!
+  name: String
+  isPrivate: Boolean
+  isAnonymous: Boolean
+  startDate: DateTime
+  endDate: DateTime
+}
+
+input DeleteShowInput {
+  slug: String!
+}
+
+type Result {
+  status: Int!
+  message: String!
+}
+
+type User {
+  id: ID!
+  uid: String!
+  email: String!
+  name: String!
+  isPremium: Boolean!
+  createdAt: DateTime!
+}
+
+type Show {
+  id: ID!
+  slug: String!
+  name: String!
+  isPrivate: Boolean!
+  isAnonymous: Boolean!
+  startDate: DateTime!
+  endDate: DateTime!
+  respondents: [Respondent!]!
+  createdAt: DateTime!
+}
+
+type Respondent {
+  id: ID!
+  user: User!
+  role: String!
+  response: [DateTime!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
