@@ -4,7 +4,8 @@ const { prisma } = require('../../generated/prisma')
 // auth methods go here!
 exports.verifyUser = async function(token, uid) {
     // const decodedToken = await admin.auth().verifyIdToken(token);
-    const user = await prisma.user({ uid: decodedToken.uid })
+    // const user = await prisma.user({ uid: decodedToken.uid })
+    const user = await prisma.user({ uid: uid })
 
     return user
     // if(user && decodedToken.uid == uid) {

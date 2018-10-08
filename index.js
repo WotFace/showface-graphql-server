@@ -11,6 +11,7 @@ const server = new GraphQLServer({
       db: prisma,
     }
   },
+  // middlewares: // add middlewares here
 })
 
 server.start(() => console.log('Server is running on http://localhost:4000'))

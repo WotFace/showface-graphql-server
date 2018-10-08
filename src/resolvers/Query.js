@@ -10,10 +10,8 @@ const Query = {
     user: async function (parent, { auth }, context, info) {
         try {
             const user = await authenticate.verifyUser(auth.token, auth.uid)
-            
-            return {
-                user
-            }
+
+            return user
         } catch (err) {
             console.log(err)
             return
@@ -21,7 +19,7 @@ const Query = {
     },
 
     // get one show's details
-    show: async function (parent, { auth, data }, context, info) {
+    show: async function (parent, { auth, where }, context, info) {
         try {
             const user = await authenticate.verifyUser(auth.token, auth.uid)
 
@@ -47,7 +45,7 @@ const Query = {
             }
             `
 
-            const show = await prisma.show({ slug: data.slug }).$fragment(fragment)
+            const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
             // check if current user is really inside the show itself if the show is private
             if (show.isPrivate) {
                 const userData = _.find(show.respondents, function(a) { return a.user.email == user.email })
@@ -57,10 +55,7 @@ const Query = {
                 }
             }
 
-
-            return {
-                show
-            }
+            return show
         } catch (err) {
             console.log(err)
             return

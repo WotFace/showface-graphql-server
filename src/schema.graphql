@@ -7,7 +7,7 @@ type Query {
 }
 
 type Mutation {
-  createUser(data: CreateUserInput!): Result!
+  createUser(auth: AuthInput!, data: CreateUserInput!): User!
   editUserSettings(auth: AuthInput!, data: EditUserSettingsInput!): Result!
   createNewShow(auth: AuthInput!, data: CreateNewShowInput!): Show!
   editShowSettings(auth: AuthInput!, data: EditShowSettingsInput!): Result!
@@ -97,31 +97,31 @@ type Result {
 }
 
 type User {
-  id: ID!
-  uid: String!
-  email: String!
-  name: String!
-  isPremium: Boolean!
-  createdAt: DateTime!
+  id: ID
+  uid: String
+  email: String
+  name: String
+  isPremium: Boolean
+  createdAt: DateTime
 }
 
 type Show {
-  id: ID!
-  slug: String!
-  name: String!
-  isPrivate: Boolean!
-  isAnonymous: Boolean!
-  startDate: DateTime!
-  endDate: DateTime!
-  respondents: [Respondent!]!
-  createdAt: DateTime!
+  id: ID
+  slug: String
+  name: String
+  isPrivate: Boolean
+  isAnonymous: Boolean
+  startDate: DateTime
+  endDate: DateTime
+  respondents: [Respondent!]
+  createdAt: DateTime
 }
 
 type Respondent {
-  id: ID!
-  user: User!
-  role: String!
+  id: ID
+  user: User
+  role: String
   response: [DateTime!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime
+  updatedAt: DateTime
 }

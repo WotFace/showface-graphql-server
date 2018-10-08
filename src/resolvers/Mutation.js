@@ -1,18 +1,17 @@
 const authenticate = require('./auth')
 const { prisma } = require('../../generated/prisma')
 const _ = require('lodash')
+const utils = require('../utils')
 
 // before production turn all prisma. to context.db. for explicitness
 const Mutation = {
 
     // creating a new user
-    createUser: async function (parent, { data }, context, info) {
+    createUser: async function (parent, { auth, data }, context, info) {
         try {
+            // const user = await authenticate.verifyUser(auth.token, auth.uid)
             const createUser = await prisma.createUser(data)
-
-            return {
-                createUser
-            }
+            return createUser
         } catch (err) {
             console.log(err)
             return
@@ -29,6 +28,7 @@ const Mutation = {
                 data: data
             })
 
+            console.log(updateUser)
             // we don't need to catch a few errors here because our
             // schema catches them and the data field would be null
             return {
@@ -331,18 +331,24 @@ const Mutation = {
                 return
             }
 
-            const createOrEditResponse
-
             if (userData != null) {
-                createOrEditResponse = await prisma.updateShow({
+                const createOrEditResponse = await prisma.updateShow({
                     where: { slug: data.slug },
                     data: editResponseWhenUserExists(userData.id, data.response)
                 })
+
+                return {
+                    createOrEditResponse
+                }
             } else {
-                createOrEditResponse = await prisma.updateShow({
+                const createOrEditResponse = await prisma.updateShow({
                     where: { slug: data.slug },
                     data: createResponseWhenUserNotExist(user.email, data.response)
                 })
+
+                return {
+                    createOrEditResponse
+                }
             }
 
             return {
