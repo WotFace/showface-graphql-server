@@ -72,7 +72,8 @@ type Query {
 
 type Respondent {
   id: ID!
-  user: User!
+  anonymousName: String
+  user: User
   role: String!
   response: [DateTime!]!
   createdAt: DateTime!
@@ -86,7 +87,8 @@ type RespondentConnection {
 }
 
 input RespondentCreateInput {
-  user: UserCreateOneInput!
+  anonymousName: String
+  user: UserCreateOneInput
   role: String
   response: RespondentCreateresponseInput
 }
@@ -108,6 +110,8 @@ type RespondentEdge {
 enum RespondentOrderByInput {
   id_ASC
   id_DESC
+  anonymousName_ASC
+  anonymousName_DESC
   role_ASC
   role_DESC
   createdAt_ASC
@@ -118,6 +122,7 @@ enum RespondentOrderByInput {
 
 type RespondentPreviousValues {
   id: ID!
+  anonymousName: String
   role: String!
   response: [DateTime!]!
   createdAt: DateTime!
@@ -143,13 +148,15 @@ input RespondentSubscriptionWhereInput {
 }
 
 input RespondentUpdateDataInput {
-  user: UserUpdateOneRequiredInput
+  anonymousName: String
+  user: UserUpdateOneInput
   role: String
   response: RespondentUpdateresponseInput
 }
 
 input RespondentUpdateInput {
-  user: UserUpdateOneRequiredInput
+  anonymousName: String
+  user: UserUpdateOneInput
   role: String
   response: RespondentUpdateresponseInput
 }
@@ -193,6 +200,20 @@ input RespondentWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  anonymousName: String
+  anonymousName_not: String
+  anonymousName_in: [String!]
+  anonymousName_not_in: [String!]
+  anonymousName_lt: String
+  anonymousName_lte: String
+  anonymousName_gt: String
+  anonymousName_gte: String
+  anonymousName_contains: String
+  anonymousName_not_contains: String
+  anonymousName_starts_with: String
+  anonymousName_not_starts_with: String
+  anonymousName_ends_with: String
+  anonymousName_not_ends_with: String
   user: UserWhereInput
   role: String
   role_not: String
@@ -239,8 +260,11 @@ type Show {
   name: String!
   isPrivate: Boolean!
   isAnonymous: Boolean!
+  isReadOnly: Boolean!
+  isCreatedAnonymously: Boolean!
   startDate: DateTime!
   endDate: DateTime!
+  interval: Int!
   respondents(where: RespondentWhereInput, orderBy: RespondentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Respondent!]
   createdAt: DateTime!
 }
@@ -256,8 +280,11 @@ input ShowCreateInput {
   name: String!
   isPrivate: Boolean
   isAnonymous: Boolean
+  isReadOnly: Boolean
+  isCreatedAnonymously: Boolean
   startDate: DateTime!
   endDate: DateTime!
+  interval: Int!
   respondents: RespondentCreateManyInput
 }
 
@@ -277,10 +304,16 @@ enum ShowOrderByInput {
   isPrivate_DESC
   isAnonymous_ASC
   isAnonymous_DESC
+  isReadOnly_ASC
+  isReadOnly_DESC
+  isCreatedAnonymously_ASC
+  isCreatedAnonymously_DESC
   startDate_ASC
   startDate_DESC
   endDate_ASC
   endDate_DESC
+  interval_ASC
+  interval_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -293,8 +326,11 @@ type ShowPreviousValues {
   name: String!
   isPrivate: Boolean!
   isAnonymous: Boolean!
+  isReadOnly: Boolean!
+  isCreatedAnonymously: Boolean!
   startDate: DateTime!
   endDate: DateTime!
+  interval: Int!
   createdAt: DateTime!
 }
 
@@ -321,8 +357,11 @@ input ShowUpdateInput {
   name: String
   isPrivate: Boolean
   isAnonymous: Boolean
+  isReadOnly: Boolean
+  isCreatedAnonymously: Boolean
   startDate: DateTime
   endDate: DateTime
+  interval: Int
   respondents: RespondentUpdateManyInput
 }
 
@@ -373,6 +412,10 @@ input ShowWhereInput {
   isPrivate_not: Boolean
   isAnonymous: Boolean
   isAnonymous_not: Boolean
+  isReadOnly: Boolean
+  isReadOnly_not: Boolean
+  isCreatedAnonymously: Boolean
+  isCreatedAnonymously_not: Boolean
   startDate: DateTime
   startDate_not: DateTime
   startDate_in: [DateTime!]
@@ -389,6 +432,14 @@ input ShowWhereInput {
   endDate_lte: DateTime
   endDate_gt: DateTime
   endDate_gte: DateTime
+  interval: Int
+  interval_not: Int
+  interval_in: [Int!]
+  interval_not_in: [Int!]
+  interval_lt: Int
+  interval_lte: Int
+  interval_gt: Int
+  interval_gte: Int
   respondents_every: RespondentWhereInput
   respondents_some: RespondentWhereInput
   respondents_none: RespondentWhereInput
@@ -506,10 +557,12 @@ input UserUpdateInput {
   isPremium: Boolean
 }
 
-input UserUpdateOneRequiredInput {
+input UserUpdateOneInput {
   create: UserCreateInput
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
   connect: UserWhereUniqueInput
 }
 

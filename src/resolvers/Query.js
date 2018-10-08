@@ -21,8 +21,6 @@ const Query = {
     // get one show's details
     show: async function (parent, { auth, where }, context, info) {
         try {
-            const user = await authenticate.verifyUser(auth.token, auth.uid)
-
             // Prisma client apparently needs this fragment to retrieve nested obj
             const fragment = `
             fragment RespondentsOnShow on Show {
@@ -31,8 +29,11 @@ const Query = {
                 name
                 isPrivate
                 isAnonymous
+                isCreatedAnonymously
+                isReadOnly
                 startDate
                 endDate
+                interval
                 respondents {
                     user {
                         name
@@ -44,10 +45,11 @@ const Query = {
                 createdAt
             }
             `
-
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
+
             // check if current user is really inside the show itself if the show is private
-            if (show.isPrivate) {
+            if (!show.isCreatedAnonymously && show.isPrivate) {
+                const user = await authenticate.verifyUser(auth.token, auth.uid)
                 const userData = _.find(show.respondents, function(a) { return a.user.email == user.email })
                 // return if show is private but user data is not there (means not invited)
                 if (userData == null) {
@@ -65,11 +67,11 @@ const Query = {
     // get all of user's show
     userShows: async function (parent, { auth, first, skip }, context, info) {
         try {
+            // user must be signed in and verified first
             const user = await authenticate.verifyUser(auth.token, auth.uid)
 
             // we will not get the respondents here since that won't be economical
             // default is getting first 10 if first and skip not specified
-
             const userShows = await prisma.shows({
                 where: {
                     respondents_every: {

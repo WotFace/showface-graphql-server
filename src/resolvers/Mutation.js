@@ -9,6 +9,7 @@ const Mutation = {
     // creating a new user
     createUser: async function (parent, { auth, data }, context, info) {
         try {
+            // authenticate firebase user first see if they're alive, might need to change the middleware though
             // const user = await authenticate.verifyUser(auth.token, auth.uid)
             const createUser = await prisma.createUser(data)
             return createUser
@@ -21,6 +22,7 @@ const Mutation = {
     // editing a user's settings
     editUserSettings: async function (parent, { auth, data }, context, info) {
         try {
+            // need to be logged in to change user's settings
             const user = await authenticate.verifyUser(auth.token, auth.uid)
 
             const updateUser = await prisma.updateUser({
@@ -28,12 +30,9 @@ const Mutation = {
                 data: data
             })
 
-            console.log(updateUser)
             // we don't need to catch a few errors here because our
             // schema catches them and the data field would be null
-            return {
-                updateUser
-            }
+            return updateUser
         } catch (err) {
             console.log(err)
             return
@@ -43,28 +42,40 @@ const Mutation = {
     // creating some new show
     createNewShow: async function (parent, { auth, data }, context, info) {
         try {
-            const user = await authenticate.verifyUser(auth.token, auth.uid)
-
             const randomUniqueSlug = "insert slug generation method here"
+            // if auth exists, means that the user must be verified before being
+            // able to create a show
+            if (auth) {
+                const user = await authenticate.verifyUser(auth.token, auth.uid)
 
-            const data = _.merge(data, {
-                slug: randomUniqueSlug,
-                respondents: {
-                    create: {
-                        user: {
-                            connect: {
-                                email: user.email
-                            }
-                        },
-                        role: "admin"
+                const showData = _.merge(data, {
+                    slug: randomUniqueSlug,
+                    respondents: {
+                        create: {
+                            user: {
+                                connect: {
+                                    email: user.email
+                                }
+                            },
+                            role: "admin"
+                        }
                     }
-                }
-            })
+                })
 
-            const createNewShow = await prisma.createShow(data)
+                const createNewNonAnonymousShow = await prisma.createShow(showData)
 
-            return {
-                createNewShow
+                return createNewNonAnonymousShow
+            } else {
+                // but if auth is null, then the user is probably not signed in
+                // then show will be created anonymously
+                const showData = _.merge(data, {
+                    slug: randomUniqueSlug,
+                    isCreatedAnonymously: true,
+                })
+
+                const createNewAnonymousShow = await prisma.createShow(showData)
+
+                return createNewAnonymousShow
             }
         } catch (err) {
             console.log(err)
@@ -73,12 +84,13 @@ const Mutation = {
     },
 
     // editing some show's settings
-    editShowSettings: async function (parent, { auth, data }, context, info) {
+    editShowSettings: async function (parent, { auth, where, data }, context, info) {
         try {
-            const user = await authenticate.verifyUser(auth.token, auth.uid)
-
+            // get show data such that we know whether it is private or created anonymously
             const fragment = `
             fragment RespondentsOnShow on Show {
+                isPrivate
+                isCreatedAnonymously
                 respondents {
                     user {
                         email
@@ -88,23 +100,35 @@ const Mutation = {
             }
             `
             // check if current requesting user is admin of current show
-            const showRespondents = await prisma.show({ slug: data.slug }).$fragment(fragment)
+            const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
 
-            const userData = _.find(showRespondents.respondents, function (a) { return a.user.email == user.email })
+            // if auth exists and the show is created anonymously, then handle accordingly
+            if (show.isCreatedAnonymously) {
+                const editShowCreatedAnonymously = await prisma.updateShow({
+                    where: {
+                        slug: where.slug
+                    },
+                    data: data
+                })
 
-            if (userData.role != 'admin') {
-                return
-            }
+                return editShowCreatedAnonymously
+            } else {
+                const user = await authenticate.verifyUser(auth.token, auth.uid)
+    
+                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+    
+                if (userData.role != 'admin') {
+                    return
+                }
 
-            const editShowSettings = await prisma.updateShow({
-                where: {
-                    slug: data.slug
-                },
-                data: data
-            })
-
-            return {
-                editShowSettings
+                const editShowNotCreatedAnonymously = await prisma.updateShow({
+                    where: {
+                        slug: where.slug
+                    },
+                    data: data
+                })
+            
+                return editShowNotCreatedAnonymously
             }
         } catch (err) {
             console.log(err)
@@ -113,12 +137,11 @@ const Mutation = {
     },
 
     // deleting a show
-    deleteShow: async function (parent, { auth, data }, context, info) {
+    deleteShow: async function (parent, { auth, where }, context, info) {
         try {
-            const user = await authenticate.verifyUser(auth.token, auth.uid)
-
             const fragment = `
             fragment RespondentsOnShow on Show {
+                isCreatedAnonymously
                 respondents {
                     user {
                         email
@@ -128,20 +151,25 @@ const Mutation = {
             }
             `
             // check if current requesting user is admin of current show
-            const showRespondents = await prisma.show({ slug: data.slug }).$fragment(fragment)
+            const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
+            
+            // check if user has authentication and show is not created anonymously
+            if (auth && !show.isCreatedAnonymously) {
+                const user = await authenticate.verifyUser(auth.token, auth.uid)
+    
+                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+    
+                if (userData.role != 'admin') {
+                    return
+                }
+    
+                const deleteShow = await prisma.deleteShow({
+                    slug: where.slug
+                })
 
-            const userData = _.find(showRespondents.respondents, function (a) { return a.user.email == user.email })
-
-            if (userData.role != 'admin') {
-                return
-            }
-
-            const deleteShow = await prisma.deleteShow({
-                slug: data.slug
-            })
-
-            return {
-                deleteShow
+                return deleteShow
+            } else {
+                return 'Not authorized'
             }
         } catch (err) {
             console.log(err)

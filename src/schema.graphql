@@ -1,17 +1,17 @@
 scalar DateTime
 
-type Query {
-  user(auth: AuthInput!): User!
-  show(auth: AuthInput!, where: ShowQueryInput!): Show!
-  userShows(auth: AuthInput!, first: Int, skip: Int): [Show!]!
+type Query { 
+  user(auth: AuthInput!): User! #
+  show(auth: AuthInput!, where: ShowQueryInput!): Show! #
+  userShows(auth: AuthInput!, first: Int, skip: Int): [Show!]! #
 }
 
 type Mutation {
-  createUser(auth: AuthInput!, data: CreateUserInput!): User!
-  editUserSettings(auth: AuthInput!, data: EditUserSettingsInput!): Result!
-  createNewShow(auth: AuthInput!, data: CreateNewShowInput!): Show!
-  editShowSettings(auth: AuthInput!, data: EditShowSettingsInput!): Result!
-  deleteShow(auth: AuthInput!, data: DeleteShowInput!): Result!
+  createUser(auth: AuthInput!, data: CreateUserInput!): User! #
+  editUserSettings(auth: AuthInput!, data: EditUserSettingsInput!): User! #
+  createNewShow(auth: AuthInput, data: CreateNewShowInput!): Show! #
+  editShowSettings(auth: AuthInput, where: EditShowSettingsWhereInput!, data: EditShowSettingsInput!): Show! #
+  deleteShow(auth: AuthInput!, where: DeleteShowInput!): Result! # change Result!
   editShowRespondentStatus(auth: AuthInput!, data: EditShowRespondentStatusInput!): Result!
   addRespondents(auth: AuthInput!, data: AddRespondentsInput!): Result! #done but with some doubts
   deleteRespondents(auth: AuthInput!, data: DeleteRespondentsInput!): Result! 
@@ -27,6 +27,10 @@ input EditShowRespondentStatusInput {
   slug: String!
   email: String!
   role: String!
+}
+
+input EditShowSettingsWhereInput {
+  slug: String!
 }
 
 input EditUserSettingsInput {
@@ -72,19 +76,19 @@ input AuthInput {
 
 input CreateNewShowInput {
   name: String!
-  isPrivate: Boolean
-  isAnonymous: Boolean
   startDate: DateTime!
   endDate: DateTime!
+  interval: Int!
 }
 
 input EditShowSettingsInput {
-  slug: String!
   name: String
   isPrivate: Boolean
   isAnonymous: Boolean
+  isReadOnly: Boolean
   startDate: DateTime
   endDate: DateTime
+  interval: Int
 }
 
 input DeleteShowInput {
@@ -111,14 +115,18 @@ type Show {
   name: String
   isPrivate: Boolean
   isAnonymous: Boolean
+  isReadOnly: Boolean
+  isCreatedAnonymously: Boolean
   startDate: DateTime
   endDate: DateTime
+  interval: Int
   respondents: [Respondent!]
   createdAt: DateTime
 }
 
 type Respondent {
   id: ID
+  anonymousName: String
   user: User
   role: String
   response: [DateTime!]

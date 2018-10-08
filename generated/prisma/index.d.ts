@@ -188,6 +188,8 @@ export interface ClientConstructor<T> {
 export type RespondentOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "anonymousName_ASC"
+  | "anonymousName_DESC"
   | "role_ASC"
   | "role_DESC"
   | "createdAt_ASC"
@@ -206,10 +208,16 @@ export type ShowOrderByInput =
   | "isPrivate_DESC"
   | "isAnonymous_ASC"
   | "isAnonymous_DESC"
+  | "isReadOnly_ASC"
+  | "isReadOnly_DESC"
+  | "isCreatedAnonymously_ASC"
+  | "isCreatedAnonymously_DESC"
   | "startDate_ASC"
   | "startDate_DESC"
   | "endDate_ASC"
   | "endDate_DESC"
+  | "interval_ASC"
+  | "interval_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -234,7 +242,8 @@ export type UserOrderByInput =
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export interface RespondentCreateInput {
-  user: UserCreateOneInput;
+  anonymousName?: String;
+  user?: UserCreateOneInput;
   role?: String;
   response?: RespondentCreateresponseInput;
 }
@@ -248,8 +257,11 @@ export interface ShowUpdateInput {
   name?: String;
   isPrivate?: Boolean;
   isAnonymous?: Boolean;
+  isReadOnly?: Boolean;
+  isCreatedAnonymously?: Boolean;
   startDate?: DateTimeInput;
   endDate?: DateTimeInput;
+  interval?: Int;
   respondents?: RespondentUpdateManyInput;
 }
 
@@ -268,6 +280,20 @@ export interface RespondentWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  anonymousName?: String;
+  anonymousName_not?: String;
+  anonymousName_in?: String[] | String;
+  anonymousName_not_in?: String[] | String;
+  anonymousName_lt?: String;
+  anonymousName_lte?: String;
+  anonymousName_gt?: String;
+  anonymousName_gte?: String;
+  anonymousName_contains?: String;
+  anonymousName_not_contains?: String;
+  anonymousName_starts_with?: String;
+  anonymousName_not_starts_with?: String;
+  anonymousName_ends_with?: String;
+  anonymousName_not_ends_with?: String;
   user?: UserWhereInput;
   role?: String;
   role_not?: String;
@@ -318,8 +344,11 @@ export interface ShowCreateInput {
   name: String;
   isPrivate?: Boolean;
   isAnonymous?: Boolean;
+  isReadOnly?: Boolean;
+  isCreatedAnonymously?: Boolean;
   startDate: DateTimeInput;
   endDate: DateTimeInput;
+  interval: Int;
   respondents?: RespondentCreateManyInput;
 }
 
@@ -425,6 +454,10 @@ export interface ShowWhereInput {
   isPrivate_not?: Boolean;
   isAnonymous?: Boolean;
   isAnonymous_not?: Boolean;
+  isReadOnly?: Boolean;
+  isReadOnly_not?: Boolean;
+  isCreatedAnonymously?: Boolean;
+  isCreatedAnonymously_not?: Boolean;
   startDate?: DateTimeInput;
   startDate_not?: DateTimeInput;
   startDate_in?: DateTimeInput[] | DateTimeInput;
@@ -441,6 +474,14 @@ export interface ShowWhereInput {
   endDate_lte?: DateTimeInput;
   endDate_gt?: DateTimeInput;
   endDate_gte?: DateTimeInput;
+  interval?: Int;
+  interval_not?: Int;
+  interval_in?: Int[] | Int;
+  interval_not_in?: Int[] | Int;
+  interval_lt?: Int;
+  interval_lte?: Int;
+  interval_gt?: Int;
+  interval_gte?: Int;
   respondents_every?: RespondentWhereInput;
   respondents_some?: RespondentWhereInput;
   respondents_none?: RespondentWhereInput;
@@ -457,10 +498,12 @@ export interface ShowWhereInput {
   NOT?: ShowWhereInput[] | ShowWhereInput;
 }
 
-export interface UserUpdateOneRequiredInput {
+export interface UserUpdateOneInput {
   create?: UserCreateInput;
   update?: UserUpdateDataInput;
   upsert?: UserUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
   connect?: UserWhereUniqueInput;
 }
 
@@ -556,13 +599,15 @@ export interface UserCreateOneInput {
 }
 
 export interface RespondentUpdateInput {
-  user?: UserUpdateOneRequiredInput;
+  anonymousName?: String;
+  user?: UserUpdateOneInput;
   role?: String;
   response?: RespondentUpdateresponseInput;
 }
 
 export interface RespondentUpdateDataInput {
-  user?: UserUpdateOneRequiredInput;
+  anonymousName?: String;
+  user?: UserUpdateOneInput;
   role?: String;
   response?: RespondentUpdateresponseInput;
 }
@@ -631,40 +676,32 @@ export interface UserPreviousValuesSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface ShowPreviousValuesNode {
+export interface UserNode {
   id: ID_Output;
-  slug: String;
+  uid: String;
+  email: String;
   name: String;
-  isPrivate: Boolean;
-  isAnonymous: Boolean;
-  startDate: DateTimeOutput;
-  endDate: DateTimeOutput;
+  isPremium: Boolean;
   createdAt: DateTimeOutput;
 }
 
-export interface ShowPreviousValues
-  extends Promise<ShowPreviousValuesNode>,
-    Fragmentable {
+export interface User extends Promise<UserNode>, Fragmentable {
   id: () => Promise<ID_Output>;
-  slug: () => Promise<String>;
+  uid: () => Promise<String>;
+  email: () => Promise<String>;
   name: () => Promise<String>;
-  isPrivate: () => Promise<Boolean>;
-  isAnonymous: () => Promise<Boolean>;
-  startDate: () => Promise<DateTimeOutput>;
-  endDate: () => Promise<DateTimeOutput>;
+  isPremium: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
-export interface ShowPreviousValuesSubscription
-  extends Promise<AsyncIterator<ShowPreviousValuesNode>>,
+export interface UserSubscription
+  extends Promise<AsyncIterator<UserNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  slug: () => Promise<AsyncIterator<String>>;
+  uid: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
-  isPrivate: () => Promise<AsyncIterator<Boolean>>;
-  isAnonymous: () => Promise<AsyncIterator<Boolean>>;
-  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
-  endDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  isPremium: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
@@ -697,8 +734,11 @@ export interface ShowNode {
   name: String;
   isPrivate: Boolean;
   isAnonymous: Boolean;
+  isReadOnly: Boolean;
+  isCreatedAnonymously: Boolean;
   startDate: DateTimeOutput;
   endDate: DateTimeOutput;
+  interval: Int;
   createdAt: DateTimeOutput;
 }
 
@@ -708,8 +748,11 @@ export interface Show extends Promise<ShowNode>, Fragmentable {
   name: () => Promise<String>;
   isPrivate: () => Promise<Boolean>;
   isAnonymous: () => Promise<Boolean>;
+  isReadOnly: () => Promise<Boolean>;
+  isCreatedAnonymously: () => Promise<Boolean>;
   startDate: () => Promise<DateTimeOutput>;
   endDate: () => Promise<DateTimeOutput>;
+  interval: () => Promise<Int>;
   respondents: <T = Promise<Array<RespondentNode>>>(
     args?: {
       where?: RespondentWhereInput;
@@ -732,8 +775,11 @@ export interface ShowSubscription
   name: () => Promise<AsyncIterator<String>>;
   isPrivate: () => Promise<AsyncIterator<Boolean>>;
   isAnonymous: () => Promise<AsyncIterator<Boolean>>;
+  isReadOnly: () => Promise<AsyncIterator<Boolean>>;
+  isCreatedAnonymously: () => Promise<AsyncIterator<Boolean>>;
   startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   endDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  interval: () => Promise<AsyncIterator<Int>>;
   respondents: <T = Promise<AsyncIterator<Array<RespondentSubscription>>>>(
     args?: {
       where?: RespondentWhereInput;
@@ -889,6 +935,7 @@ export interface ShowConnectionSubscription
 
 export interface RespondentPreviousValuesNode {
   id: ID_Output;
+  anonymousName?: String;
   role: String;
   response: DateTimeOutput[];
   createdAt: DateTimeOutput;
@@ -899,6 +946,7 @@ export interface RespondentPreviousValues
   extends Promise<RespondentPreviousValuesNode>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  anonymousName: () => Promise<String>;
   role: () => Promise<String>;
   response: () => Promise<DateTimeOutput[]>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -909,6 +957,7 @@ export interface RespondentPreviousValuesSubscription
   extends Promise<AsyncIterator<RespondentPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  anonymousName: () => Promise<AsyncIterator<String>>;
   role: () => Promise<AsyncIterator<String>>;
   response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -940,6 +989,7 @@ export interface RespondentSubscriptionPayloadSubscription
 
 export interface RespondentNode {
   id: ID_Output;
+  anonymousName?: String;
   role: String;
   response: DateTimeOutput[];
   createdAt: DateTimeOutput;
@@ -948,6 +998,7 @@ export interface RespondentNode {
 
 export interface Respondent extends Promise<RespondentNode>, Fragmentable {
   id: () => Promise<ID_Output>;
+  anonymousName: () => Promise<String>;
   user: <T = User>() => T;
   role: () => Promise<String>;
   response: () => Promise<DateTimeOutput[]>;
@@ -959,6 +1010,7 @@ export interface RespondentSubscription
   extends Promise<AsyncIterator<RespondentNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  anonymousName: () => Promise<AsyncIterator<String>>;
   user: <T = UserSubscription>() => T;
   role: () => Promise<AsyncIterator<String>>;
   response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
@@ -1016,6 +1068,52 @@ export interface ShowEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
+export interface ShowPreviousValuesNode {
+  id: ID_Output;
+  slug: String;
+  name: String;
+  isPrivate: Boolean;
+  isAnonymous: Boolean;
+  isReadOnly: Boolean;
+  isCreatedAnonymously: Boolean;
+  startDate: DateTimeOutput;
+  endDate: DateTimeOutput;
+  interval: Int;
+  createdAt: DateTimeOutput;
+}
+
+export interface ShowPreviousValues
+  extends Promise<ShowPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  slug: () => Promise<String>;
+  name: () => Promise<String>;
+  isPrivate: () => Promise<Boolean>;
+  isAnonymous: () => Promise<Boolean>;
+  isReadOnly: () => Promise<Boolean>;
+  isCreatedAnonymously: () => Promise<Boolean>;
+  startDate: () => Promise<DateTimeOutput>;
+  endDate: () => Promise<DateTimeOutput>;
+  interval: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface ShowPreviousValuesSubscription
+  extends Promise<AsyncIterator<ShowPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  slug: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  isPrivate: () => Promise<AsyncIterator<Boolean>>;
+  isAnonymous: () => Promise<AsyncIterator<Boolean>>;
+  isReadOnly: () => Promise<AsyncIterator<Boolean>>;
+  isCreatedAnonymously: () => Promise<AsyncIterator<Boolean>>;
+  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  endDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  interval: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
 export interface UserSubscriptionPayloadNode {
   mutation: MutationType;
   updatedFields?: String[];
@@ -1039,35 +1137,6 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface UserNode {
-  id: ID_Output;
-  uid: String;
-  email: String;
-  name: String;
-  isPremium: Boolean;
-  createdAt: DateTimeOutput;
-}
-
-export interface User extends Promise<UserNode>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  uid: () => Promise<String>;
-  email: () => Promise<String>;
-  name: () => Promise<String>;
-  isPremium: () => Promise<Boolean>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<UserNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  uid: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  isPremium: () => Promise<AsyncIterator<Boolean>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
 /*
 DateTime scalar input type, allowing Date
 */
@@ -1084,17 +1153,17 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 export type ID_Input = string | number;
 export type ID_Output = string;
 
-export type Long = string;
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
 
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
+export type Long = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
