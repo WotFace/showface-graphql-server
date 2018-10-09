@@ -469,9 +469,9 @@ type Subscription {
 
 type User {
   id: ID!
-  uid: String!
+  uid: String
   email: String!
-  name: String!
+  name: String
   isPremium: Boolean!
   createdAt: DateTime!
 }
@@ -483,9 +483,9 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  uid: String!
+  uid: String
   email: String!
-  name: String!
+  name: String
   isPremium: Boolean
 }
 
@@ -518,9 +518,9 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
-  uid: String!
+  uid: String
   email: String!
-  name: String!
+  name: String
   isPremium: Boolean!
   createdAt: DateTime!
 }

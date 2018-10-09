@@ -1,31 +1,43 @@
 scalar DateTime
 
 type Query { 
-  user(auth: AuthInput!): User! #
-  show(auth: AuthInput!, where: ShowQueryInput!): Show! #
-  userShows(auth: AuthInput!, first: Int, skip: Int): [Show!]! #
+  user(auth: AuthInput!): User #
+  show(auth: AuthInput, where: ShowQueryInput!): Show #
+  userShows(auth: AuthInput!, first: Int, skip: Int): [Show!] #
 }
 
 type Mutation {
-  createUser(auth: AuthInput!, data: CreateUserInput!): User! #
-  editUserSettings(auth: AuthInput!, data: EditUserSettingsInput!): User! #
-  createNewShow(auth: AuthInput, data: CreateNewShowInput!): Show! #
-  editShowSettings(auth: AuthInput, where: EditShowSettingsWhereInput!, data: EditShowSettingsInput!): Show! #
-  deleteShow(auth: AuthInput!, where: DeleteShowInput!): Result! # change Result!
-  editShowRespondentStatus(auth: AuthInput!, data: EditShowRespondentStatusInput!): Result!
-  addRespondents(auth: AuthInput!, data: AddRespondentsInput!): Result! #done but with some doubts
-  deleteRespondents(auth: AuthInput!, data: DeleteRespondentsInput!): Result! 
-  createOrEditResponse(auth: AuthInput!, data: CreateOrEditResponseInput!): Result! #done with some doubts
-  deleteResponse(auth: AuthInput!, data: DeleteResponseInput!): Result!
+  createUser(auth: AuthInput!, data: CreateUserInput!): User #
+  editUserSettings(auth: AuthInput!, data: EditUserSettingsInput!): User #
+  createNewShow(auth: AuthInput, data: CreateNewShowInput!): Show #
+  editShowSettings(auth: AuthInput, where: EditShowSettingsWhereInput!, data: EditShowSettingsInput!): Show #
+  deleteShow(auth: AuthInput!, where: DeleteShowInput!): Result! #
+  editShowRespondentStatus(auth: AuthInput!, where: EditShowRespondentStatusWhereInput!, data: EditShowRespondentStatusInput!): Show #
+  addRespondentsByEmail(auth: AuthInput!, where: AddRespondentsByEmailWhereInput!, data: [AddRespondentsByEmailInput!]!): Show #
+  deleteRespondents(auth: AuthInput!, where: DeleteRespondentsWhereInput!): Show #
+  createNewResponse(auth: AuthInput!, where: CreateNewResponseWhereInput!, data: CreateNewResponseInput!): Show #
+  editResponse(auth: AuthInput!, where: EditResponseWhereInput!, data: EditResponseInput!): Show #
+  deleteResponse(auth: AuthInput!, where: DeleteResponseWhereInput!, data: DeleteResponseInput!): Show #
+}
+
+type Subscription {
+  show(auth: AuthInput, where: ShowSubscriptionInput!): Show!
+}
+
+input ShowSubscriptionInput {
+  slug: String!
 }
 
 input ShowQueryInput {
   slug: String!
 }
 
-input EditShowRespondentStatusInput {
+input EditShowRespondentStatusWhereInput {
   slug: String!
-  email: String!
+  id: String!
+}
+
+input EditShowRespondentStatusInput {
   role: String!
 }
 
@@ -39,34 +51,47 @@ input EditUserSettingsInput {
 }
 
 input CreateUserInput {
-  uid: String!
   email: String!
   name: String!
 }
 
-input DeleteRespondentsInput {
+input DeleteRespondentsWhereInput {
   slug: String!
-  respondentEmails: [String!]!
+  id: [String!]!
 }
 
-input AddRespondentsInput {
+input AddRespondentsByEmailWhereInput {
   slug: String!
-  respondentDetails: [RespondentDetails!]!
 }
 
-input RespondentDetails {
-  respondentEmail: String!
-  respondentRole: String!
+input AddRespondentsByEmailInput {
+  email: String!
+  role: String!
 }
 
-input CreateOrEditResponseInput {
-  slug: String!
+input CreateNewResponseInput {
   response: [DateTime!]
 }
 
-input DeleteResponseInput {
+input CreateNewResponseWhereInput {
   slug: String!
-  email: String!
+}
+
+input EditResponseWhereInput {
+  slug: String!
+  id: String!
+}
+
+input EditResponseInput {
+  response: [DateTime!]
+}
+
+input DeleteResponseWhereInput {
+  slug: String!
+}
+
+input DeleteResponseInput {
+  id: String!
 }
 
 input AuthInput {

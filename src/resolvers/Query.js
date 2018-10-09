@@ -14,7 +14,7 @@ const Query = {
             return user
         } catch (err) {
             console.log(err)
-            return
+            return null
         }
     },
 
@@ -23,7 +23,7 @@ const Query = {
         try {
             // Prisma client apparently needs this fragment to retrieve nested obj
             const fragment = `
-            fragment RespondentsOnShow on Show {
+            fragment QueryShowOnShow on Show {
                 id
                 slug
                 name
@@ -53,7 +53,7 @@ const Query = {
                 const userData = _.find(show.respondents, function(a) { return a.user.email == user.email })
                 // return if show is private but user data is not there (means not invited)
                 if (userData == null) {
-                    return
+                    return null
                 }
             }
 
@@ -82,9 +82,7 @@ const Query = {
                 skip: skip ? skip : 0
             })
 
-            return {
-                userShows
-            }
+            return userShows
         } catch (err) {
             console.log(err)
             return

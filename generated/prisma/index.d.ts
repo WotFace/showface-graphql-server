@@ -587,9 +587,9 @@ export interface UserUpdateInput {
 }
 
 export interface UserCreateInput {
-  uid: String;
+  uid?: String;
   email: String;
-  name: String;
+  name?: String;
   isPremium?: Boolean;
 }
 
@@ -647,9 +647,9 @@ export interface NodeNode {
 
 export interface UserPreviousValuesNode {
   id: ID_Output;
-  uid: String;
+  uid?: String;
   email: String;
-  name: String;
+  name?: String;
   isPremium: Boolean;
   createdAt: DateTimeOutput;
 }
@@ -678,9 +678,9 @@ export interface UserPreviousValuesSubscription
 
 export interface UserNode {
   id: ID_Output;
-  uid: String;
+  uid?: String;
   email: String;
-  name: String;
+  name?: String;
   isPremium: Boolean;
   createdAt: DateTimeOutput;
 }

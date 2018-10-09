@@ -7,4 +7,11 @@ utils.resultOk = function (message) {
     }
 }
 
+utils.resultError = function(errCode, message) {
+    return {
+        status: errCode,
+        message: message
+    }
+}
+
 module.exports = utils
