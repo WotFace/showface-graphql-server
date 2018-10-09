@@ -21,12 +21,13 @@ type Mutation {
 }
 
 type Subscription {
-  show(auth: AuthInput, where: ShowSubscriptionInput!): Show!
+  show(auth: AuthInput, where: ShowSubscriptionWhereInput!): Show!
 }
 
-input ShowSubscriptionInput {
+input ShowSubscriptionWhereInput {
   slug: String!
 }
+
 
 input ShowQueryInput {
   slug: String!
@@ -70,6 +71,7 @@ input AddRespondentsByEmailInput {
 }
 
 input CreateNewResponseInput {
+  name: String
   response: [DateTime!]
 }
 

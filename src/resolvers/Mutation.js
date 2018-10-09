@@ -1,8 +1,15 @@
-const authenticate = require('./auth')
+// db replace with context in production
 const { prisma } = require('../../generated/prisma')
+
+// extensible auth middleware
+const authenticate = require('./auth')
+
+// libraries
 const _ = require('lodash')
-const utils = require('../utils')
 const randomWords = require('random-words')
+
+// utils
+const utils = require('../utils')
 
 // before production turn all prisma. to context.db. for explicitness
 const Mutation = {
@@ -12,14 +19,10 @@ const Mutation = {
         try {
             // authenticate firebase user first see if they're alive, might need to change the middleware though
             // const user = await authenticate.verifyUser(auth.token, auth.uid)
-            const userData = _.merge(data, {
-                uid: auth.uid
-            })
+            const userData = _.merge(data, { uid: auth.uid })
 
             const createUser = await prisma.upsertUser({
-                where: {
-                    email: data.email
-                },
+                where: { email: data.email },
                 create: userData,
                 update: userData
             })
@@ -90,9 +93,7 @@ const Mutation = {
                     respondents: {
                         create: {
                             user: {
-                                connect: {
-                                    email: user.email
-                                }
+                                connect: { email: user.email }
                             },
                             role: "admin"
                         }
@@ -143,9 +144,7 @@ const Mutation = {
                 const showData = _.omit(data, ['isReadOnly', 'isPrivate', 'isAnonymous'])
 
                 const editShowCreatedAnonymously = await prisma.updateShow({
-                    where: {
-                        slug: where.slug
-                    },
+                    where: { slug: where.slug },
                     data: showData
                 })
 
@@ -161,9 +160,7 @@ const Mutation = {
                 }
 
                 const editShowNotCreatedAnonymously = await prisma.updateShow({
-                    where: {
-                        slug: where.slug
-                    },
+                    where: { slug: where.slug },
                     data: data
                 })
             
@@ -202,9 +199,7 @@ const Mutation = {
                     return null
                 }
     
-                const deleteShow = await prisma.deleteShow({
-                    slug: where.slug
-                })
+                const deleteShow = await prisma.deleteShow({ slug: where.slug })
 
                 console.log(deleteShow)
                 return utils.resultOk("Successfully deleted show " + where.slug)
@@ -256,9 +251,7 @@ const Mutation = {
                         respondents: {
                             update: {
                                 where: { id: updateUserData.id },
-                                data: {
-                                    role: data.role
-                                }
+                                data: { role: data.role }
                             }
                         }
                     }
@@ -327,18 +320,14 @@ const Mutation = {
                     if (isRegisteredUser) {
                         return {
                             user: {
-                                connect: {
-                                    email: a.email
-                                }
+                                connect: { email: a.email }
                             },
                             role: a.role
                         }
                     } else {
                         return {
                             user: {
-                                create: {
-                                    email: a.email
-                                },
+                                create: { email: a.email },
                             },
                             role: a.role
                         }
@@ -348,9 +337,7 @@ const Mutation = {
                 const addRespondents = await prisma.updateShow({
                     where: { slug: where.slug },
                     data: {
-                        respondents: {
-                            create: respondentsArray
-                        }
+                        respondents: { create: respondentsArray }
                     }
                 }).$fragment(fragment)
     
@@ -385,9 +372,7 @@ const Mutation = {
             const deletedIdObject = {
                 where: { slug: where.slug },
                 data: {
-                    respondents: {
-                        delete: where.id.map(function(a) { return { id: a }})
-                    }
+                    respondents: { delete: where.id.map(function(a) { return { id: a }}) }
                 }
             }
 
@@ -432,39 +417,133 @@ const Mutation = {
             }
             `
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
+
+            if (show.isReadOnly) {
+                return null
+            }
             
+            // check if show is created anonymously, if it is, then heck care just create another response
             if (!show.isCreatedAnonymously) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
-                const userData = _.find(showResult.respondents, function (a) { return a.user.email == user.email })
-    
-                // when user is not a part of the list but the show's private
+                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+
+                // when show is not private user can still add even though they're not invited
+                // so the only way we can return null is when show is private AND there is no user that matches
+                // this check weeds out the users who are not signed in trying to change a private show
                 if (show.isPrivate && userData == null) {
-                    return
+                    return null
                 }
 
+                // fuck the name damn long
+                const createNewResponseNotCreatedAnonymously = await prisma.updateShow({
+                    where: { slug: where.slug },
+                    data: {
+                        respondents: {
+                            create: {
+                                response: data.response,
+                                user: {
+                                    connect: { email: user.email }
+                                }
+                            }
+                        }
+                    }
+                }).$fragment(fragment)
 
+                return createNewResponseNotCreatedAnonymously
             } else {
-                const createNewResponseCreatedAnonymously = await prisma.updateShow().$fragment(fragment)
+                const createNewResponseCreatedAnonymously = await prisma.updateShow({
+                    where: { slug: where.slug },
+                    data: {
+                        respondents: {
+                            create: {
+                                response: data.response,
+                                anonymousName: data.name
+                            }
+                        }
+                    }
+                }).$fragment(fragment)
+
+                return createNewResponseCreatedAnonymously
             }
+        } catch (err) {
+            console.log(err)
+            return
+        }
+    },
 
-            if (userData != null) {
-                const createOrEditResponse = await prisma.updateShow({
-                    where: { slug: data.slug },
-                    data: editResponseWhenUserExists(userData.id, data.response)
-                })
-
-                return {
-                    createOrEditResponse
+    // edit response
+    editResponse: async function (parent, { auth, where, data }, context, info) {
+        try {
+            const fragment = `
+            fragment RespondentsOnShow on Show {
+                isPrivate
+                isCreatedAnonymously
+                isReadOnly
+                respondents {
+                    id
+                    user {
+                        email
+                    }
+                    role
                 }
+            }
+            `
+            const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
+
+            if (show.isReadOnly) {
+                return null
+            }
+            
+            // check if show is created anonymously, if not then it's FREE FOR ALL!
+            if (!show.isCreatedAnonymously) {
+                const user = await authenticate.verifyUser(auth.token, auth.uid)
+
+                // need to find response for those signed in already
+                const userData = _.find(showResult.respondents, function (a) { return a.user.email == user.email })
+
+                // get the response that the user is trying to edit
+                const respondentData = _.find(show.respondents, function (b) { return b.id == data.id })
+
+                // when show is not private user can still add even though they're not invited
+                // so the only way we can return null is when show is private AND there is no user that matches
+                // this check weeds out the users who are not signed in trying to change a private show
+                if (show.isPrivate && user == null) {
+                    return null
+                }
+                
+                // this checks if the user is him/herself or whether the user is an admin
+                // since they can change
+                if (userData.role != "admin" || user.email != respondentData.email || respondentData.user != null) {
+                    return null
+                }
+
+                const editResponseNotCreatedAnonymously = await prisma.updateShow({
+                    where: { slug: where.slug },
+                    data: {
+                        respondents: {
+                            update: {
+                                where: { id: where.id },
+                                data: { response: data.response }
+                            }
+                        }
+                    }
+                }).$fragment(fragment)
+
+                return editResponseNotCreatedAnonymously
             } else {
-                const createOrEditResponse = await prisma.updateShow({
-                    where: { slug: data.slug },
-                    data: createResponseWhenUserNotExist(user.email, data.response)
-                })
+                const editResponseCreatedAnonymously = await prisma.updateShow({
+                    where: { slug: where.slug },
+                    data: {
+                        respondents: {
+                            update: {
+                                where: { id: where.id, },
+                                data: { response: data.response }
+                            }
+                        }
+                    }
+                }).$fragment(fragment)
 
-                return {
-                    createOrEditResponse
-                }
+                return editResponseCreatedAnonymously
             }
         } catch (err) {
             console.log(err)
@@ -478,6 +557,7 @@ const Mutation = {
             const fragment = `
             fragment RespondentsOnShow on Show {
                 isCreatedAnonymously
+                isReadOnly
                 respondents {
                     id
                     user {
@@ -489,13 +569,15 @@ const Mutation = {
             `
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
 
+            if (show.isReadOnly) {
+                return null
+            }
+
             const deletedIdObject = {
                 where: { slug: where.slug },
                 data: {
                     respondents: {
-                        delete: {
-                            id: data.id
-                        }
+                        delete: { id: data.id }
                     }
                 }
             }
@@ -505,12 +587,16 @@ const Mutation = {
     
                 const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
                 const respondentData = _.find(show.respondents, function (b) { return b.id == data.id })
+
+                if (show.isPrivate && user == null) {
+                    return null
+                }
     
                 // there are three conditions here if the show is not created anonymously
                 // first is that if the user is admin, they can delete whatever,
-                // second one is when the id that is going to be deleted belongs to a certain user email
+                // second one is when the respondent id email that is going to be deleted belongs to a certain user email
                 // third one is when there is no user attached to the respondent id itself, it's free for all right? lolol
-                if (userData.role != "admin" || user.email != userData.email || respondentData.user != null) {
+                if (userData.role != "admin" || user.email != respondentData.email || respondentData.user != null) {
                     return null
                 }
 
@@ -527,37 +613,6 @@ const Mutation = {
             return
         }
     },
-}
-
-function createResponseWhenUserNotExist(email, response) {
-    return {
-        respondents: {
-            create: {
-                role: "member",
-                response: {
-                    set: response,
-                },
-                user: {
-                    connect: {
-                        email: email
-                    }
-                }
-            }
-        }
-    }
-}
-
-function editResponseWhenUserExists(id, response) {
-    return {
-        respondents: {
-            update: {
-                where: { id: id },
-                data: {
-                    response: response,
-                }
-            }
-        }
-    }
 }
 
 module.exports = {

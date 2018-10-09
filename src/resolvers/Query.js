@@ -57,6 +57,8 @@ const Query = {
                 }
             }
 
+            // TODO: handle when isAnonymous is true
+
             return show
         } catch (err) {
             console.log(err)
