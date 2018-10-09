@@ -84,7 +84,7 @@ const Mutation = {
             `
             // if auth exists, means that the user must be verified before being
             // able to create a show
-            if (auth.token && auth.uid) {
+            if (auth != null) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
 
                 const showData = _.merge(data, {
@@ -151,10 +151,8 @@ const Mutation = {
                 return editShowCreatedAnonymously
             } else {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
-                console.log(show.respondents)
                 const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
     
-                console.log(userData)
                 if (userData.role != 'admin') {
                     return null
                 }
@@ -190,7 +188,7 @@ const Mutation = {
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
             
             // check if user has authentication and show is not created anonymously
-            if (auth.token && auth.uid && !show.isCreatedAnonymously) {
+            if (auth != null && !show.isCreatedAnonymously) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
     
                 const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
@@ -423,24 +421,22 @@ const Mutation = {
             }
             
             // check if show is created anonymously, if it is, then heck care just create another response
-            if (!show.isCreatedAnonymously) {
+            if (!show.isCreatedAnonymously && show.isPrivate) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
                 const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
-
                 // when show is not private user can still add even though they're not invited
                 // so the only way we can return null is when show is private AND there is no user that matches
                 // this check weeds out the users who are not signed in trying to change a private show
                 if (show.isPrivate && userData == null) {
                     return null
                 }
-
                 // fuck the name damn long
                 const createNewResponseNotCreatedAnonymously = await prisma.updateShow({
                     where: { slug: where.slug },
                     data: {
                         respondents: {
                             create: {
-                                response: data.response,
+                                response: { set: data.response },
                                 user: {
                                     connect: { email: user.email }
                                 }
@@ -456,7 +452,7 @@ const Mutation = {
                     data: {
                         respondents: {
                             create: {
-                                response: data.response,
+                                response: { set: data.response },
                                 anonymousName: data.name
                             }
                         }
@@ -493,24 +489,17 @@ const Mutation = {
             if (show.isReadOnly) {
                 return null
             }
+
+            // get the response that the user is trying to edit
+            const respondentData = _.find(show.respondents, function (b) { return b.id == where.id })
             
             // check if show is created anonymously, if not then it's FREE FOR ALL!
-            if (!show.isCreatedAnonymously) {
+            if (auth) {
+                console.log('hello')
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
-
                 // need to find response for those signed in already
-                const userData = _.find(showResult.respondents, function (a) { return a.user.email == user.email })
+                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
 
-                // get the response that the user is trying to edit
-                const respondentData = _.find(show.respondents, function (b) { return b.id == data.id })
-
-                // when show is not private user can still add even though they're not invited
-                // so the only way we can return null is when show is private AND there is no user that matches
-                // this check weeds out the users who are not signed in trying to change a private show
-                if (show.isPrivate && user == null) {
-                    return null
-                }
-                
                 // this checks if the user is him/herself or whether the user is an admin
                 // since they can change
                 if (userData.role != "admin" || user.email != respondentData.email || respondentData.user != null) {
@@ -523,7 +512,9 @@ const Mutation = {
                         respondents: {
                             update: {
                                 where: { id: where.id },
-                                data: { response: data.response }
+                                data: { 
+                                    response: { set: data.response  }
+                                }
                             }
                         }
                     }
@@ -531,13 +522,19 @@ const Mutation = {
 
                 return editResponseNotCreatedAnonymously
             } else {
+                if (show.isPrivate || respondentData.user != null) {
+                    return null
+                }
+
                 const editResponseCreatedAnonymously = await prisma.updateShow({
                     where: { slug: where.slug },
                     data: {
                         respondents: {
                             update: {
                                 where: { id: where.id, },
-                                data: { response: data.response }
+                                data: { 
+                                    response: { set: data.response }
+                                }
                             }
                         }
                     }
@@ -552,7 +549,7 @@ const Mutation = {
     },
 
     // deleting a user's response
-    deleteResponse: async function (parent, { auth, where, data }, context, info) {
+    deleteResponse: async function (parent, { auth, where }, context, info) {
         try {
             const fragment = `
             fragment RespondentsOnShow on Show {
@@ -573,24 +570,21 @@ const Mutation = {
                 return null
             }
 
+            const respondentData = _.find(show.respondents, function (b) { return b.id == where.id })
+
             const deletedIdObject = {
                 where: { slug: where.slug },
                 data: {
                     respondents: {
-                        delete: { id: data.id }
+                        delete: { id: where.id }
                     }
                 }
             }
             
-            if (!show.isCreatedAnonymously) {
+            if (auth) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
     
                 const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
-                const respondentData = _.find(show.respondents, function (b) { return b.id == data.id })
-
-                if (show.isPrivate && user == null) {
-                    return null
-                }
     
                 // there are three conditions here if the show is not created anonymously
                 // first is that if the user is admin, they can delete whatever,
@@ -604,6 +598,10 @@ const Mutation = {
 
                 return deleteResponseWhenNotCreatedAnonymously
             } else {
+                if (show.isPrivate || respondentData.user != null) {
+                    return null
+                }
+
                 const deleteResponseWhenCreatedAnonymously = await prisma.updateShow(deletedIdObject).$fragment(fragment)
                 
                 return deleteResponseWhenCreatedAnonymously

@@ -41,8 +41,6 @@ const Subscription = {
                 updatedFields
               }
             `
-            const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
-
             // check if current user is really inside the show itself if the show is private
             if (!show.isCreatedAnonymously && show.isPrivate) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
@@ -53,9 +51,7 @@ const Subscription = {
                 }
             }
 
-            // TODO: handle when isAnonymous is true
-
-            return show
+            // TODO: implement websocket handshake
         } catch (err) {
             console.log(err)
             return

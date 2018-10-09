@@ -15,9 +15,9 @@ type Mutation {
   editShowRespondentStatus(auth: AuthInput!, where: EditShowRespondentStatusWhereInput!, data: EditShowRespondentStatusInput!): Show #
   addRespondentsByEmail(auth: AuthInput!, where: AddRespondentsByEmailWhereInput!, data: [AddRespondentsByEmailInput!]!): Show #
   deleteRespondents(auth: AuthInput!, where: DeleteRespondentsWhereInput!): Show #
-  createNewResponse(auth: AuthInput!, where: CreateNewResponseWhereInput!, data: CreateNewResponseInput!): Show #
-  editResponse(auth: AuthInput!, where: EditResponseWhereInput!, data: EditResponseInput!): Show #
-  deleteResponse(auth: AuthInput!, where: DeleteResponseWhereInput!, data: DeleteResponseInput!): Show #
+  createNewResponse(auth: AuthInput, where: CreateNewResponseWhereInput!, data: CreateNewResponseInput!): Show #
+  editResponse(auth: AuthInput, where: EditResponseWhereInput!, data: EditResponseInput!): Show #
+  deleteResponse(auth: AuthInput, where: DeleteResponseWhereInput!): Show #
 }
 
 type Subscription {
@@ -90,9 +90,6 @@ input EditResponseInput {
 
 input DeleteResponseWhereInput {
   slug: String!
-}
-
-input DeleteResponseInput {
   id: String!
 }
 
