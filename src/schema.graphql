@@ -14,14 +14,14 @@ type Mutation {
   deleteShow(auth: AuthInput!, where: DeleteShowInput!): Result! #
   editShowRespondentStatus(auth: AuthInput!, where: EditShowRespondentStatusWhereInput!, data: EditShowRespondentStatusInput!): Show #
   addRespondentsByEmail(auth: AuthInput!, where: AddRespondentsByEmailWhereInput!, data: [AddRespondentsByEmailInput!]!): Show #
-  deleteRespondents(auth: AuthInput!, where: DeleteRespondentsWhereInput!): Show #
+  deleteRespondents(auth: AuthInput, where: DeleteRespondentsWhereInput!): Show #
   createNewResponse(auth: AuthInput, where: CreateNewResponseWhereInput!, data: CreateNewResponseInput!): Show #
   editResponse(auth: AuthInput, where: EditResponseWhereInput!, data: EditResponseInput!): Show #
-  deleteResponse(auth: AuthInput, where: DeleteResponseWhereInput!): Show #
+  deleteResponse(auth: AuthInput, where: DeleteResponseWhereInput!): Show
 }
 
 type Subscription {
-  show(auth: AuthInput, where: ShowSubscriptionWhereInput!): Show!
+  show(auth: AuthInput, where: ShowSubscriptionWhereInput!): Show
 }
 
 input ShowSubscriptionWhereInput {
@@ -138,9 +138,8 @@ type Show {
   slug: String
   name: String
   isPrivate: Boolean
-  isAnonymous: Boolean
   isReadOnly: Boolean
-  isCreatedAnonymously: Boolean
+  areResponsesHidden: Boolean
   startDate: DateTime
   endDate: DateTime
   interval: Int

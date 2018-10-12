@@ -28,17 +28,18 @@ const Query = {
                 slug
                 name
                 isPrivate
-                isAnonymous
-                isCreatedAnonymously
                 isReadOnly
+                areResponsesHidden
                 startDate
                 endDate
                 interval
                 respondents {
+                    id
                     user {
                         name
                         email
                     }
+                    anonymousName
                     response
                     role
                 }
@@ -47,8 +48,8 @@ const Query = {
             `
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
 
-            // check if current user is really inside the show itself if the show is private
-            if (!show.isCreatedAnonymously && show.isPrivate) {
+            // if show is private must check if there's a user with the name inside
+            if (show.isPrivate) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
                 const userData = _.find(show.respondents, function(a) { return a.user.email == user.email })
                 // return if show is private but user data is not there (means not invited)
@@ -56,8 +57,6 @@ const Query = {
                     return null
                 }
             }
-
-            // TODO: handle when isAnonymous is true
 
             return show
         } catch (err) {

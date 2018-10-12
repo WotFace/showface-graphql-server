@@ -267,11 +267,43 @@ function join() {
     console.log(butt == null)
 }
 
-deleteRespondents().catch((err) => {
+async function helloIamGroot() {
+    const butt = await prisma.$exists.show({
+        slug: "express-land-pocket",
+        respondents_every: {
+            role: "admin"
+        }
+    })
+    console.log(butt)
+    return butt
+}
+
+helloIamGroot().catch((err) => {
     console.log(err);
 });
 
-join()
+function hellobub() {
+    const he = "hello1"
+    const hes = null
+
+    if (he) {
+        console.log('1st')
+    }
+
+    if (!he) {
+        console.log('2nd')
+    }
+
+    if (hes) {
+        console.log('3rd')
+    }
+
+    if (!hes) {
+        console.log('4th')
+    }
+}
+
+hellobub()
 
 // getAllUsers(function(users) {
 //     console.log(users)
