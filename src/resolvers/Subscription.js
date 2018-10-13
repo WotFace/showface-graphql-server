@@ -1,11 +1,11 @@
 const authenticate = require('./auth')
-const { prisma } = require('../../generated/prisma') // can use context.db.($func()) but I dw to risk it bruh
+// const { prisma } = require('../../generated/prisma') // can use context.db.($func()) but I dw to risk it bruh
 const _ = require('lodash')
 
 const Subscription = {
     show: {
         subscribe: async function (parent, { auth, where }, context, info) {
-            return prisma.$subscribe.show({
+            return context.db.$subscribe.show({
                 mutation_in: ['CREATED', 'DELETED', 'UPDATED']
             }).node()
 

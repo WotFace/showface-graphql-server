@@ -163,11 +163,11 @@ input RespondentUpdateInput {
 
 input RespondentUpdateManyInput {
   create: [RespondentCreateInput!]
+  update: [RespondentUpdateWithWhereUniqueNestedInput!]
+  upsert: [RespondentUpsertWithWhereUniqueNestedInput!]
   delete: [RespondentWhereUniqueInput!]
   connect: [RespondentWhereUniqueInput!]
   disconnect: [RespondentWhereUniqueInput!]
-  update: [RespondentUpdateWithWhereUniqueNestedInput!]
-  upsert: [RespondentUpsertWithWhereUniqueNestedInput!]
 }
 
 input RespondentUpdateresponseInput {
@@ -259,9 +259,8 @@ type Show {
   slug: String!
   name: String!
   isPrivate: Boolean!
-  isAnonymous: Boolean!
   isReadOnly: Boolean!
-  isCreatedAnonymously: Boolean!
+  areResponsesHidden: Boolean!
   startDate: DateTime!
   endDate: DateTime!
   interval: Int!
@@ -279,9 +278,8 @@ input ShowCreateInput {
   slug: String!
   name: String!
   isPrivate: Boolean
-  isAnonymous: Boolean
   isReadOnly: Boolean
-  isCreatedAnonymously: Boolean
+  areResponsesHidden: Boolean
   startDate: DateTime!
   endDate: DateTime!
   interval: Int!
@@ -302,12 +300,10 @@ enum ShowOrderByInput {
   name_DESC
   isPrivate_ASC
   isPrivate_DESC
-  isAnonymous_ASC
-  isAnonymous_DESC
   isReadOnly_ASC
   isReadOnly_DESC
-  isCreatedAnonymously_ASC
-  isCreatedAnonymously_DESC
+  areResponsesHidden_ASC
+  areResponsesHidden_DESC
   startDate_ASC
   startDate_DESC
   endDate_ASC
@@ -325,9 +321,8 @@ type ShowPreviousValues {
   slug: String!
   name: String!
   isPrivate: Boolean!
-  isAnonymous: Boolean!
   isReadOnly: Boolean!
-  isCreatedAnonymously: Boolean!
+  areResponsesHidden: Boolean!
   startDate: DateTime!
   endDate: DateTime!
   interval: Int!
@@ -356,9 +351,8 @@ input ShowUpdateInput {
   slug: String
   name: String
   isPrivate: Boolean
-  isAnonymous: Boolean
   isReadOnly: Boolean
-  isCreatedAnonymously: Boolean
+  areResponsesHidden: Boolean
   startDate: DateTime
   endDate: DateTime
   interval: Int
@@ -410,12 +404,10 @@ input ShowWhereInput {
   name_not_ends_with: String
   isPrivate: Boolean
   isPrivate_not: Boolean
-  isAnonymous: Boolean
-  isAnonymous_not: Boolean
   isReadOnly: Boolean
   isReadOnly_not: Boolean
-  isCreatedAnonymously: Boolean
-  isCreatedAnonymously_not: Boolean
+  areResponsesHidden: Boolean
+  areResponsesHidden_not: Boolean
   startDate: DateTime
   startDate_not: DateTime
   startDate_in: [DateTime!]

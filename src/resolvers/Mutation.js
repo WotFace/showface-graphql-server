@@ -393,7 +393,7 @@ const Mutation = {
     createNewResponse: async function (parent, { auth, where, data }, context, info) {
         try {
             const fragment = `
-            fragment RespondentsOnShow on Show {
+            fragment CreateNewResponseOnShow on Show {
                 isPrivate
                 isReadOnly
                 respondents {
@@ -412,7 +412,7 @@ const Mutation = {
                 return null
             }
 
-            if (auth.token && auth.uid) {
+            if (auth) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
                 const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
 
@@ -466,7 +466,7 @@ const Mutation = {
     editResponse: async function (parent, { auth, where, data }, context, info) {
         try {
             const fragment = `
-            fragment RespondentsOnShow on Show {
+            fragment EditResponseOnShow on Show {
                 isPrivate
                 isReadOnly
                 respondents {
@@ -489,14 +489,14 @@ const Mutation = {
             const respondentData = _.find(show.respondents, function (b) { return b.id == where.id })
 
             // check if show is created anonymously, if not then it's FREE FOR ALL!
-            if (auth.token && auth.uid) {
+            if (auth) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
                 // need to find response for those signed in already
                 const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
 
                 // this checks if the user is him/herself or whether the user is an admin
                 // or the respondent they want to change doesn't have a signed up account
-                if (!userData || userData.role != "admin" || 
+                if (!userData || userData.role != "admin" ||
                     user.email != respondentData.email || respondentData.user != null) {
                     return null
                 }
@@ -547,7 +547,7 @@ const Mutation = {
     deleteResponse: async function (parent, { auth, where }, context, info) {
         try {
             const fragment = `
-            fragment RespondentsOnShow on Show {
+            fragment DeleteResponseOnShow on Show {
                 isReadOnly
                 isPrivate
                 respondents {
@@ -571,12 +571,17 @@ const Mutation = {
                 where: { slug: where.slug },
                 data: {
                     respondents: {
-                        delete: { id: where.id }
+                        update: {
+                            where: { id: respondentData.id },
+                            data: { 
+                                response: { set: [] } 
+                            }
+                        }
                     }
                 }
             }
 
-            if (auth.token && auth.uid) {
+            if (auth) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
 
                 const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
@@ -585,7 +590,7 @@ const Mutation = {
                 // first is that if the user is admin, they can delete whatever,
                 // second one is when the respondent id email that is going to be deleted belongs to a certain user email
                 // third one is when there is no user attached to the respondent id itself, it's free for all right? lolol
-                if (!userData || userData.role != "admin" || 
+                if (!userData || userData.role != "admin" ||
                     user.email != respondentData.email || respondentData.user != null) {
                     return null
                 }
@@ -601,6 +606,201 @@ const Mutation = {
                 const deleteResponseWhenCreatedAnonymously = await prisma.updateShow(deletedIdObject).$fragment(fragment)
 
                 return deleteResponseWhenCreatedAnonymously
+            }
+        } catch (err) {
+            console.log(err)
+            return
+        }
+    },
+
+    // create or update response
+    _upsertResponse: async function (parent, { auth, where, data }, context, info) {
+        try {
+            const fragment = `
+            fragment _UpsertResponseOnShow on Show {
+                isPrivate
+                isReadOnly
+                respondents {
+                    id
+                    anonymousName
+                    user {
+                        email
+                    }
+                    role
+                }
+            }
+            `
+            // didn't use $exists because db query will shot up by quite a lot
+            const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
+
+            if (show.isReadOnly) {
+                return null
+            }
+
+            const respondentData = _.find(show.respondents, function (b) { return b.anonymousName == where.name || b.user.email == where.email })
+
+            // create new one if both doesnt exist
+            if (!respondentData) {
+                if (auth) {
+                    const user = await authenticate.verifyUser(auth.token, auth.uid)
+                    const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+
+                    // find if user exists in the respondents list, if not then reject request
+                    if (show.isPrivate && !userData) {
+                        return null
+                    }
+
+                    const createNewResponseWithUser = await prisma.updateShow({
+                        where: { slug: where.slug },
+                        data: {
+                            respondents: {
+                                create: {
+                                    response: { set: data.response },
+                                    user: {
+                                        connect: { email: user.email }
+                                    }
+                                }
+                            }
+                        }
+                    }).$fragment(fragment)
+
+                    return createNewResponseWithUser
+                } else {
+                    if (show.isPrivate) {
+                        return null
+                    }
+
+                    const createNewResponseNotPrivate = await prisma.updateShow({
+                        where: { slug: where.slug },
+                        data: {
+                            respondents: {
+                                create: {
+                                    response: { set: data.response },
+                                    anonymousName: where.name,
+                                    user: null
+                                }
+                            }
+                        }
+                    }).$fragment(fragment)
+
+                    return createNewResponseNotPrivate
+                }
+            } else {
+                if (auth) {
+                    const user = await authenticate.verifyUser(auth.token, auth.uid)
+                    // need to find response for those signed in already
+                    const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+
+                    // this checks if the user is him/herself or whether the user is an admin
+                    // or the respondent they want to change doesn't have a signed up account
+                    if (!userData || userData.role != "admin" ||
+                        user.email != respondentData.email || respondentData.user != null) {
+                        return null
+                    }
+
+                    const editResponseWithUser = await prisma.updateShow({
+                        where: { slug: where.slug },
+                        data: {
+                            respondents: {
+                                update: {
+                                    where: { id: respondentData.id },
+                                    data: {
+                                        response: { set: data.response }
+                                    }
+                                }
+                            }
+                        }
+                    }).$fragment(fragment)
+
+                    return editResponseWithUser
+                } else {
+                    if (show.isPrivate || respondentData.user != null) {
+                        return null
+                    }
+
+                    const editResponseWithoutUser = await prisma.updateShow({
+                        where: { slug: where.slug },
+                        data: {
+                            respondents: {
+                                update: {
+                                    where: { id: respondentData.id, },
+                                    data: {
+                                        response: { set: data.response }
+                                    }
+                                }
+                            }
+                        }
+                    }).$fragment(fragment)
+
+                    return editResponseWithoutUser
+                }
+            }
+        } catch (err) {
+            console.log(err)
+            return
+        }
+    },
+
+    // deleting a user's response through name or email
+    _deleteResponse: async function (parent, { auth, where }, context, info) {
+        try {
+            const fragment = `
+            fragment _DeleteResponseOnShow on Show {
+                isReadOnly
+                isPrivate
+                respondents {
+                    id
+                    anonymousName
+                    user {
+                        email
+                    }
+                    role
+                }
+            }
+            `
+            const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
+
+            if (show.isReadOnly) {
+                return null
+            }
+
+            const respondentData = _.find(show.respondents, function (b) { return b.anonymousName == where.name || b.user.email == where.email })
+
+            deletedIdObject = {
+                where: { slug: where.slug },
+                data: {
+                    respondents: {
+                        update: {
+                            where: { id: respondentData.id },
+                            data: { 
+                                response: { set: [] } 
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (auth) {
+                const user = await authenticate.verifyUser(auth.token, auth.uid)
+
+                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+
+                if (!userData || userData.role != "admin" ||
+                    user.email != respondentData.email || respondentData.user != null) {
+                    return null
+                }
+
+                const deleteResponseWhenNotCreatedAnonymously = await prisma.updateShow(deletedIdObject).$fragment(fragment)
+
+                return deleteResponseWhenNotCreatedAnonymously
+            } else {
+                if (show.isPrivate || respondentData.user != null) {
+                    return null
+                }
+
+                const _deleteResponseWhenCreatedAnonymously = await prisma.updateShow(deletedIdObject).$fragment(fragment)
+
+                return _deleteResponseWhenCreatedAnonymously
             }
         } catch (err) {
             console.log(err)

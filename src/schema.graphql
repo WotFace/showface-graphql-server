@@ -18,10 +18,29 @@ type Mutation {
   createNewResponse(auth: AuthInput, where: CreateNewResponseWhereInput!, data: CreateNewResponseInput!): Show #
   editResponse(auth: AuthInput, where: EditResponseWhereInput!, data: EditResponseInput!): Show #
   deleteResponse(auth: AuthInput, where: DeleteResponseWhereInput!): Show
+  _upsertResponse(auth: AuthInput, where: _upsertResponseWhereInput!, data: _upsertResponseInput!): Show
+  _deleteResponse(auth: AuthInput, where: _deleteResponseWhereInput!): Show
 }
+
 
 type Subscription {
   show(auth: AuthInput, where: ShowSubscriptionWhereInput!): Show
+}
+
+input _upsertResponseWhereInput {
+  slug: String!
+  name: String
+  email: String
+}
+
+input _upsertResponseInput {
+  response: [DateTime!]
+}
+
+input _deleteResponseWhereInput {
+  slug: String!
+  name: String
+  email: String
 }
 
 input ShowSubscriptionWhereInput {
