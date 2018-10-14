@@ -631,6 +631,8 @@ const Mutation = {
                     id
                     anonymousName
                     user {
+                        id
+                        uid
                         email
                         name
                         isPremium
@@ -771,7 +773,7 @@ const Mutation = {
                 respondents {
                     id
                     anonymousName
-                    user {
+                    user {5
                         email
                         name
                         isPremium
