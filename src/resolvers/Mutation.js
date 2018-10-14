@@ -631,7 +631,6 @@ const Mutation = {
                     id
                     anonymousName
                     user {
-                        id
                         uid
                         email
                         name
@@ -774,7 +773,6 @@ const Mutation = {
                     id
                     anonymousName
                     user {
-                        id
                         uid
                         email
                         name
