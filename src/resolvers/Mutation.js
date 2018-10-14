@@ -618,15 +618,30 @@ const Mutation = {
         try {
             const fragment = `
             fragment _UpsertResponseOnShow on Show {
+                id
+                slug
+                name
+                interval
+                areResponsesHidden
+                endDate
+                startDate
                 isPrivate
                 isReadOnly
                 respondents {
                     id
                     anonymousName
                     user {
+                        id
+                        uid
                         email
+                        name
+                        isPremium
+                        createdAt
                     }
                     role
+                    response
+                    createdAt
+                    updatedAt
                 }
             }
             `
@@ -746,15 +761,30 @@ const Mutation = {
         try {
             const fragment = `
             fragment _DeleteResponseOnShow on Show {
-                isReadOnly
+                id
+                slug
+                name
+                interval
+                areResponsesHidden
+                endDate
+                startDate
                 isPrivate
+                isReadOnly
                 respondents {
                     id
                     anonymousName
                     user {
+                        id
+                        uid
                         email
+                        name
+                        isPremium
+                        createdAt
                     }
                     role
+                    response
+                    createdAt
+                    updatedAt
                 }
             }
             `
