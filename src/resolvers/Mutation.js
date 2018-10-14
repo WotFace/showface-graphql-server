@@ -774,7 +774,7 @@ const Mutation = {
                 respondents {
                     id
                     anonymousName
-                    user {5
+                    user {
                         email
                         name
                         isPremium
@@ -795,6 +795,7 @@ const Mutation = {
 
             const respondentData = _.find(show.respondents, function (b) { return b.anonymousName == where.name || (b.user ? b.user.email : " ") == where.email })
 
+            console.log(respondentData)
             deletedIdObject = {
                 where: { slug: where.slug },
                 data: {
