@@ -216,7 +216,7 @@ const Mutation = {
 
             if (adminExists) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
-                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+                const userData = _.find(show.respondents, function (a) { return (a.user ? a.user.email : null) == user.email })
 
                 if (userData.role != "admin") {
                     return null
@@ -275,7 +275,7 @@ const Mutation = {
             // first check whether show is anonymous first
             if (adminExists) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
-                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+                const userData = _.find(show.respondents, function (a) { return (a.user ? a.user.email : null) == user.email })
 
                 // check if user is admin of show
                 if (userData.role != 'admin') {
@@ -414,7 +414,7 @@ const Mutation = {
 
             if (auth) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
-                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+                const userData = _.find(show.respondents, function (a) { return (a.user ? a.user.email : null) == user.email })
 
                 // find if user exists in the respondents list, if not then reject request
                 if (show.isPrivate && !userData) {
@@ -492,7 +492,7 @@ const Mutation = {
             if (auth) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
                 // need to find response for those signed in already
-                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+                const userData = _.find(show.respondents, function (a) { return (a.user ? a.user.email : null) == user.email })
 
                 // this checks if the user is him/herself or whether the user is an admin
                 // or the respondent they want to change doesn't have a signed up account
@@ -584,7 +584,7 @@ const Mutation = {
             if (auth) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
 
-                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+                const userData = _.find(show.respondents, function (a) { return (a.user ? a.user.email : null) == user.email })
 
                 // there are three conditions here if the show is not created anonymously
                 // first is that if the user is admin, they can delete whatever,
@@ -651,14 +651,13 @@ const Mutation = {
             if (show.isReadOnly) {
                 return null
             }
-
-            const respondentData = _.find(show.respondents, function (b) { return b.anonymousName == where.name || b.user.email == where.email })
+            const respondentData = _.find(show.respondents, function (b) { return b.anonymousName == where.name || (b.user ? b.user.email : null) == where.email })
 
             // create new one if both doesnt exist
             if (!respondentData) {
                 if (auth) {
                     const user = await authenticate.verifyUser(auth.token, auth.uid)
-                    const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+                    const userData = _.find(show.respondents, function (a) { return (a.user ? a.user.email : null) == user.email })
 
                     // find if user exists in the respondents list, if not then reject request
                     if (show.isPrivate && !userData) {
@@ -704,7 +703,7 @@ const Mutation = {
                 if (auth) {
                     const user = await authenticate.verifyUser(auth.token, auth.uid)
                     // need to find response for those signed in already
-                    const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+                    const userData = _.find(show.respondents, function (a) { return (a.user ? a.user.email : null) == user.email })
 
                     // this checks if the user is him/herself or whether the user is an admin
                     // or the respondent they want to change doesn't have a signed up account
@@ -792,7 +791,7 @@ const Mutation = {
                 return null
             }
 
-            const respondentData = _.find(show.respondents, function (b) { return b.anonymousName == where.name || b.user.email == where.email })
+            const respondentData = _.find(show.respondents, function (b) { return b.anonymousName == where.name || (b.user ? b.user.email : null) == where.email })
 
             deletedIdObject = {
                 where: { slug: where.slug },
@@ -811,7 +810,7 @@ const Mutation = {
             if (auth) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
 
-                const userData = _.find(show.respondents, function (a) { return a.user.email == user.email })
+                const userData = _.find(show.respondents, function (a) { return (a.user ? a.user.email : null) == user.email })
 
                 if (!userData || userData.role != "admin" ||
                     user.email != respondentData.email || respondentData.user != null) {
