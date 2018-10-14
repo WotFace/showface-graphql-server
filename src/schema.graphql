@@ -144,17 +144,17 @@ type Result {
 }
 
 type User {
-  id: ID
+  id: ID!
   uid: String
-  email: String
+  email: String!
   name: String
   isPremium: Boolean
   createdAt: DateTime
 }
 
 type Show {
-  id: ID
-  slug: String
+  id: ID!
+  slug: String!
   name: String
   isPrivate: Boolean
   isReadOnly: Boolean
@@ -167,7 +167,7 @@ type Show {
 }
 
 type Respondent {
-  id: ID
+  id: ID!
   anonymousName: String
   user: User
   role: String
