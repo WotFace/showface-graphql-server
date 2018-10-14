@@ -51,7 +51,7 @@ const Query = {
             // if show is private must check if there's a user with the name inside
             if (show.isPrivate) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
-                const userData = _.find(show.respondents, function(a) { return (a.user ? a.user.email : " ") == user.email })
+                const userData = _.find(show.respondents, function(a) { return (a.user ? a.user.email : false) == user.email })
                 // return if show is private but user data is not there (means not invited)
                 if (userData == null) {
                     return null
