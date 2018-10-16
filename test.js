@@ -1,5 +1,41 @@
 const { prisma } = require('./generated/prisma');
 var _ = require('lodash');
+const mail = require('./src/utils/nodemailer')
+var fs = require('fs')
+const randomWords = require('./src/utils/random-words')
+
+for (i = 0; i < 10; i++) {
+    
+    const slugWordsNo = Math.floor(Math.random() * 1.999 + 3)
+    console.log(randomWords({ exactly: slugWordsNo, join: '-' }))
+}
+
+// var wordArray = []
+
+// fs.readFile('./words.txt', 'utf8', function(err, data) {
+//     if (err) {
+//         console.log(err)
+//     }
+
+//     const splitArray = data.split("\n")
+//     for (i = 0; i < splitArray.length; i++) {
+//         if (!/[!@#$%^&*'-/(),.?":{}|<>]/.test(splitArray[i])) {
+//             if (i % 200 == 0) {
+//                 wordArray.push('"' + splitArray[i] + '"\n')
+//             } else {
+//                 wordArray.push('"' + splitArray[i] + '"')
+//             }
+//         }
+//     }
+
+//     fs.writeFile('./words-clean.txt', wordArray, function(err) {
+//         console.log(err)
+//         console.log('file saved')
+//     })
+//     console.log('number of words: ' + wordArray.length);
+// })
+
+
 
 async function getAllUsers() {
     const allUsers = await prisma.users()
@@ -277,36 +313,8 @@ async function helloIamGroot() {
     console.log(butt)
     return butt
 }
-
-helloIamGroot().catch((err) => {
-    console.log(err);
-});
-
-function hellobub() {
-    const he = "hello1"
-    const hes = null
-
-    if (he) {
-        console.log('1st')
-    }
-
-    if (!he) {
-        console.log('2nd')
-    }
-
-    if (hes) {
-        console.log('3rd')
-    }
-
-    if (!hes) {
-        console.log('4th')
-    }
-}
-
-hellobub()
-
 // getAllUsers(function(users) {
 //     console.log(users)
-// }).catch(function(err) {
+// }).catch(function(err) {5
 //     console.error(err)
 // })

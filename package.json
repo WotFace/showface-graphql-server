@@ -17,8 +17,8 @@
     "graphql": "^0.13.2",
     "graphql-yoga": "^1.16.2",
     "lodash": "^4.17.11",
-    "prisma-client-lib": "^1.18.0",
-    "random-words": "^1.1.0"
+    "nodemailer": "^4.6.8",
+    "prisma-client-lib": "^1.18.0"
   },
   "resolutions": {
     "graphql": "^0.13.2"

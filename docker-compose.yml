@@ -1,0 +1,40 @@
+version: '3'
+services:
+  app:
+    build: .
+    image: showface-graphql-server_app:latest
+    restart: on-failure
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+    links:
+      - prisma
+    ports:
+      - 4000:4000
+  prisma:
+    image: prismagraphql/prisma:1.14
+    restart: always
+    ports:
+    - "4466:4466"
+    environment:
+      PRISMA_CONFIG: |
+        managementApiSecret: showface
+        port: 4466
+        databases:
+          default:
+            connector: mysql
+            migrations: true
+            host: db
+            port: 3306
+            user: root
+            password: password
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql:/var/lib/mysql
+volumes:
+  mysql:

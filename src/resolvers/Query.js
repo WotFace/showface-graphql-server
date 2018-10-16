@@ -14,7 +14,7 @@ const Query = {
             return user
         } catch (err) {
             console.log(err)
-            return null
+            return new Error("BadRequestError")
         }
     },
 
@@ -54,7 +54,7 @@ const Query = {
                 const userData = _.find(show.respondents, function(a) { return (a.user ? a.user.email : false) == user.email })
                 // return if show is private but user data is not there (means not invited)
                 if (userData == null) {
-                    return null
+                    return new Error("UserNotAuthorizedError")
                 }
             }
 
