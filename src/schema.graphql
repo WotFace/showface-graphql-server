@@ -127,7 +127,7 @@ input CreateNewShowInput {
 input EditShowSettingsInput {
   name: String
   isPrivate: Boolean
-  isAnonymous: Boolean
+  areResponsesHidden: Boolean
   isReadOnly: Boolean
   startDate: DateTime
   endDate: DateTime

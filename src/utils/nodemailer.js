@@ -6,7 +6,18 @@ const mail = {}
 // config
 const config = require('../config')
 
-const transporter = nodemailer.createTransport(config.mailTransporter)
+const transporter = nodemailer.createTransport({
+    host: config.mailTransporterHost,
+    port: config.mailTransporterPort,
+    secure: false,
+    auth: {
+        user: config.mailTransporterUser,
+        pass: config.mailTransporterPassword
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+})
 
 mail.sendEmail = async function (slug, title, respondents) {
     const mailOptions = {

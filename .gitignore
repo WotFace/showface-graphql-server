@@ -17,3 +17,4 @@ prisma.yml
 
 # config stuff
 config.js
+serviceKey.json

@@ -126,6 +126,7 @@ const Mutation = {
         try {
             // find if at least one of the members is an admin to check whether show is anonymous
             const adminExists = await prisma.$exists.show({ slug: where.slug, respondents_some: { role: "admin" } })
+            console.log(adminExists)
 
             // if auth exists and the show is created anonymously, then handle accordingly
             if (adminExists) {
@@ -138,6 +139,7 @@ const Mutation = {
                         role: "admin"
                     }
                 })
+                console.log(userIsAdmin)
 
                 if (!userIsAdmin) {
                     return new Error("UserNoPrivilegeError")
@@ -203,6 +205,8 @@ const Mutation = {
         try {
             const fragment = `
             fragment EditRespondentsOnShow on Show {
+                id
+                slug
                 respondents {
                     id
                     user {
@@ -236,7 +240,7 @@ const Mutation = {
                     data: {
                         respondents: {
                             update: {
-                                where: { id: updateUserData.id },
+                                where: { id: respondentData.id },
                                 data: { role: data.role }
                             }
                         }
@@ -258,6 +262,8 @@ const Mutation = {
         try {
             const fragment = `
             fragment AddRespondentsOnShow on Show {
+                id
+                slug
                 name
                 respondents {
                     id
@@ -329,7 +335,7 @@ const Mutation = {
                 }).$fragment(fragment)
 
                 // TODO: integrate emailing of invited participants here
-                mail.sendEmail(where.slug, show.name, respondentEmails)
+                // mail.sendEmail(where.slug, show.name, respondentEmails)
 
                 return addRespondents
             } else {
@@ -346,6 +352,8 @@ const Mutation = {
         try {
             const fragment = `
             fragment DeleteRespondentsOnShow on Show {
+                id
+                slug
                 respondents {
                     id
                     user {

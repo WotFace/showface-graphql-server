@@ -4,7 +4,7 @@ const mail = require('./src/utils/nodemailer')
 var fs = require('fs')
 const randomWords = require('./src/utils/random-words')
 
-for (i = 0; i < 10; i++) {
+for (i = 0; i < 100; i++) {
     
     const slugWordsNo = Math.floor(Math.random() * 1.999 + 3)
     console.log(randomWords({ exactly: slugWordsNo, join: '-' }))
