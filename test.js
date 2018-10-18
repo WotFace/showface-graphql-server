@@ -4,11 +4,19 @@ const mail = require('./src/utils/nodemailer')
 var fs = require('fs')
 const randomWords = require('./src/utils/random-words')
 
-for (i = 0; i < 100; i++) {
-    
-    const slugWordsNo = Math.floor(Math.random() * 1.999 + 3)
-    console.log(randomWords({ exactly: slugWordsNo, join: '-' }))
+const test = {
+    dates: ["2018-12-19"]
 }
+
+console.log(_.update(test, 'dates', function(a) { return { set: a }}))
+
+// mail.sendEmail("hello-old=friend", "SLdkvlir", ["tantra.anthony@gmail.com"])
+
+// for (i = 0; i < 100; i++) {
+    
+//     const slugWordsNo = Math.floor(Math.random() * 1.999 + 3)
+//     console.log(randomWords({ exactly: slugWordsNo, join: '-' }))
+// }
 
 // var wordArray = []
 

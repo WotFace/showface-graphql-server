@@ -261,8 +261,9 @@ type Show {
   isPrivate: Boolean!
   isReadOnly: Boolean!
   areResponsesHidden: Boolean!
-  startDate: DateTime!
-  endDate: DateTime!
+  dates: [DateTime!]!
+  startTime: DateTime!
+  endTime: DateTime!
   interval: Int!
   respondents(where: RespondentWhereInput, orderBy: RespondentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Respondent!]
   createdAt: DateTime!
@@ -274,14 +275,19 @@ type ShowConnection {
   aggregate: AggregateShow!
 }
 
+input ShowCreatedatesInput {
+  set: [DateTime!]
+}
+
 input ShowCreateInput {
   slug: String!
   name: String!
   isPrivate: Boolean
   isReadOnly: Boolean
   areResponsesHidden: Boolean
-  startDate: DateTime!
-  endDate: DateTime!
+  dates: ShowCreatedatesInput
+  startTime: DateTime!
+  endTime: DateTime!
   interval: Int!
   respondents: RespondentCreateManyInput
 }
@@ -304,10 +310,10 @@ enum ShowOrderByInput {
   isReadOnly_DESC
   areResponsesHidden_ASC
   areResponsesHidden_DESC
-  startDate_ASC
-  startDate_DESC
-  endDate_ASC
-  endDate_DESC
+  startTime_ASC
+  startTime_DESC
+  endTime_ASC
+  endTime_DESC
   interval_ASC
   interval_DESC
   createdAt_ASC
@@ -323,8 +329,9 @@ type ShowPreviousValues {
   isPrivate: Boolean!
   isReadOnly: Boolean!
   areResponsesHidden: Boolean!
-  startDate: DateTime!
-  endDate: DateTime!
+  dates: [DateTime!]!
+  startTime: DateTime!
+  endTime: DateTime!
   interval: Int!
   createdAt: DateTime!
 }
@@ -347,14 +354,19 @@ input ShowSubscriptionWhereInput {
   NOT: [ShowSubscriptionWhereInput!]
 }
 
+input ShowUpdatedatesInput {
+  set: [DateTime!]
+}
+
 input ShowUpdateInput {
   slug: String
   name: String
   isPrivate: Boolean
   isReadOnly: Boolean
   areResponsesHidden: Boolean
-  startDate: DateTime
-  endDate: DateTime
+  dates: ShowUpdatedatesInput
+  startTime: DateTime
+  endTime: DateTime
   interval: Int
   respondents: RespondentUpdateManyInput
 }
@@ -408,22 +420,22 @@ input ShowWhereInput {
   isReadOnly_not: Boolean
   areResponsesHidden: Boolean
   areResponsesHidden_not: Boolean
-  startDate: DateTime
-  startDate_not: DateTime
-  startDate_in: [DateTime!]
-  startDate_not_in: [DateTime!]
-  startDate_lt: DateTime
-  startDate_lte: DateTime
-  startDate_gt: DateTime
-  startDate_gte: DateTime
-  endDate: DateTime
-  endDate_not: DateTime
-  endDate_in: [DateTime!]
-  endDate_not_in: [DateTime!]
-  endDate_lt: DateTime
-  endDate_lte: DateTime
-  endDate_gt: DateTime
-  endDate_gte: DateTime
+  startTime: DateTime
+  startTime_not: DateTime
+  startTime_in: [DateTime!]
+  startTime_not_in: [DateTime!]
+  startTime_lt: DateTime
+  startTime_lte: DateTime
+  startTime_gt: DateTime
+  startTime_gte: DateTime
+  endTime: DateTime
+  endTime_not: DateTime
+  endTime_in: [DateTime!]
+  endTime_not_in: [DateTime!]
+  endTime_lt: DateTime
+  endTime_lte: DateTime
+  endTime_gt: DateTime
+  endTime_gte: DateTime
   interval: Int
   interval_not: Int
   interval_in: [Int!]

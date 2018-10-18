@@ -119,8 +119,9 @@ input AuthInput {
 
 input CreateNewShowInput {
   name: String!
-  startDate: DateTime!
-  endDate: DateTime!
+  dates: [DateTime!]
+  startTime: DateTime!
+  endTime: DateTime!
   interval: Int!
 }
 
@@ -129,8 +130,9 @@ input EditShowSettingsInput {
   isPrivate: Boolean
   areResponsesHidden: Boolean
   isReadOnly: Boolean
-  startDate: DateTime
-  endDate: DateTime
+  dates: [DateTime!]
+  startTime: DateTime
+  endTime: DateTime
   interval: Int
 }
 
@@ -159,8 +161,9 @@ type Show {
   isPrivate: Boolean
   isReadOnly: Boolean
   areResponsesHidden: Boolean
-  startDate: DateTime
-  endDate: DateTime
+  dates: [DateTime!]
+  startTime: DateTime
+  endTime: DateTime
   interval: Int
   respondents: [Respondent!]
   createdAt: DateTime

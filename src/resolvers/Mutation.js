@@ -19,7 +19,12 @@ const Mutation = {
     createUser: async function (parent, { auth, data }, context, info) {
         try {
             // authenticate firebase user first see if they're alive, might need to change the middleware though
-            // const user = await authenticate.verifyUser(auth.token, auth.uid)
+            const decodedToken = await authenticate.verifyUserForSignUp(auth.token, auth.uid)
+
+            if (decodedToken.email != data.email) {
+                throw new Error("AuthenticationError")
+            }
+
             const userData = _.merge(data, { uid: auth.uid })
 
             const createUser = await prisma.upsertUser({
@@ -69,8 +74,9 @@ const Mutation = {
                 isPrivate
                 isReadOnly
                 areResponsesHidden
-                startDate
-                endDate
+                startTime
+                endTime
+                dates
                 interval
                 respondents {
                     anonymousName
@@ -126,7 +132,6 @@ const Mutation = {
         try {
             // find if at least one of the members is an admin to check whether show is anonymous
             const adminExists = await prisma.$exists.show({ slug: where.slug, respondents_some: { role: "admin" } })
-            console.log(adminExists)
 
             // if auth exists and the show is created anonymously, then handle accordingly
             if (adminExists) {
@@ -139,27 +144,48 @@ const Mutation = {
                         role: "admin"
                     }
                 })
-                console.log(userIsAdmin)
 
                 if (!userIsAdmin) {
                     return new Error("UserNoPrivilegeError")
                 }
 
-                const editShowWithAdmin = await prisma.updateShow({
-                    where: { slug: where.slug },
-                    data: data
-                })
+                if (data.dates) {
+                    const newData = _.update(data, 'dates', function(a) { return { set: a }});;
 
-                return editShowWithAdmin
+                    const editShowWithAdmin = await prisma.updateShow({
+                        where: { slug: where.slug },
+                        data: newData
+                    })
+    
+                    return editShowWithAdmin
+                } else {
+                    const editShowWithAdmin = await prisma.updateShow({
+                        where: { slug: where.slug },
+                        data: data
+                    })
+    
+                    return editShowWithAdmin
+                }
             } else {
                 const showData = _.omit(data, ['isReadOnly', 'isPrivate', 'areResponsesHidden'])
 
-                const editShowWithoutAdmin = await prisma.updateShow({
-                    where: { slug: where.slug },
-                    data: showData
-                })
+                if (showData.dates) {
+                    const newData = _.update(showData, 'dates', function(a) { return { set: a }});
 
-                return editShowWithoutAdmin
+                    const editShowWithoutAdmin = await prisma.updateShow({
+                        where: { slug: where.slug },
+                        data: newData
+                    })
+    
+                    return editShowWithoutAdmin
+                } else {
+                    const editShowWithoutAdmin = await prisma.updateShow({
+                        where: { slug: where.slug },
+                        data: showData
+                    })
+    
+                    return editShowWithoutAdmin
+                }
             }
         } catch (err) {
             console.log(err)
@@ -334,8 +360,7 @@ const Mutation = {
                     }
                 }).$fragment(fragment)
 
-                // TODO: integrate emailing of invited participants here
-                // mail.sendEmail(where.slug, show.name, respondentEmails)
+                mail.sendEmail(where.slug, show.name, respondentEmails)
 
                 return addRespondents
             } else {
@@ -406,6 +431,8 @@ const Mutation = {
         try {
             const fragment = `
             fragment CreateNewResponseOnShow on Show {
+                id
+                slug
                 isPrivate
                 isReadOnly
                 respondents {
@@ -479,6 +506,8 @@ const Mutation = {
         try {
             const fragment = `
             fragment EditResponseOnShow on Show {
+                id
+                slug
                 isPrivate
                 isReadOnly
                 respondents {
@@ -560,6 +589,8 @@ const Mutation = {
         try {
             const fragment = `
             fragment DeleteResponseOnShow on Show {
+                id
+                slug
                 isReadOnly
                 isPrivate
                 respondents {

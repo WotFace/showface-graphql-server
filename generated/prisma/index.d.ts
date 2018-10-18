@@ -212,10 +212,10 @@ export type ShowOrderByInput =
   | "isReadOnly_DESC"
   | "areResponsesHidden_ASC"
   | "areResponsesHidden_DESC"
-  | "startDate_ASC"
-  | "startDate_DESC"
-  | "endDate_ASC"
-  | "endDate_DESC"
+  | "startTime_ASC"
+  | "startTime_DESC"
+  | "endTime_ASC"
+  | "endTime_DESC"
   | "interval_ASC"
   | "interval_DESC"
   | "createdAt_ASC"
@@ -241,11 +241,9 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface RespondentCreateInput {
-  anonymousName?: String;
-  user?: UserCreateOneInput;
-  role?: String;
-  response?: RespondentCreateresponseInput;
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export type RespondentWhereUniqueInput = AtLeastOne<{
@@ -258,10 +256,215 @@ export interface ShowUpdateInput {
   isPrivate?: Boolean;
   isReadOnly?: Boolean;
   areResponsesHidden?: Boolean;
-  startDate?: DateTimeInput;
-  endDate?: DateTimeInput;
+  dates?: ShowUpdatedatesInput;
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
   interval?: Int;
   respondents?: RespondentUpdateManyInput;
+}
+
+export interface UserUpdateOneInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface RespondentCreateManyInput {
+  create?: RespondentCreateInput[] | RespondentCreateInput;
+  connect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
+}
+
+export interface RespondentUpdateInput {
+  anonymousName?: String;
+  user?: UserUpdateOneInput;
+  role?: String;
+  response?: RespondentUpdateresponseInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  uid?: String;
+  email?: String;
+}>;
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface ShowCreatedatesInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
+
+export interface RespondentSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: RespondentWhereInput;
+  AND?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
+  OR?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
+  NOT?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
+}
+
+export interface ShowCreateInput {
+  slug: String;
+  name: String;
+  isPrivate?: Boolean;
+  isReadOnly?: Boolean;
+  areResponsesHidden?: Boolean;
+  dates?: ShowCreatedatesInput;
+  startTime: DateTimeInput;
+  endTime: DateTimeInput;
+  interval: Int;
+  respondents?: RespondentCreateManyInput;
+}
+
+export interface RespondentUpsertWithWhereUniqueNestedInput {
+  where: RespondentWhereUniqueInput;
+  update: RespondentUpdateDataInput;
+  create: RespondentCreateInput;
+}
+
+export interface RespondentUpdateresponseInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
+
+export type ShowWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  slug?: String;
+}>;
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface ShowWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  slug?: String;
+  slug_not?: String;
+  slug_in?: String[] | String;
+  slug_not_in?: String[] | String;
+  slug_lt?: String;
+  slug_lte?: String;
+  slug_gt?: String;
+  slug_gte?: String;
+  slug_contains?: String;
+  slug_not_contains?: String;
+  slug_starts_with?: String;
+  slug_not_starts_with?: String;
+  slug_ends_with?: String;
+  slug_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  isPrivate?: Boolean;
+  isPrivate_not?: Boolean;
+  isReadOnly?: Boolean;
+  isReadOnly_not?: Boolean;
+  areResponsesHidden?: Boolean;
+  areResponsesHidden_not?: Boolean;
+  startTime?: DateTimeInput;
+  startTime_not?: DateTimeInput;
+  startTime_in?: DateTimeInput[] | DateTimeInput;
+  startTime_not_in?: DateTimeInput[] | DateTimeInput;
+  startTime_lt?: DateTimeInput;
+  startTime_lte?: DateTimeInput;
+  startTime_gt?: DateTimeInput;
+  startTime_gte?: DateTimeInput;
+  endTime?: DateTimeInput;
+  endTime_not?: DateTimeInput;
+  endTime_in?: DateTimeInput[] | DateTimeInput;
+  endTime_not_in?: DateTimeInput[] | DateTimeInput;
+  endTime_lt?: DateTimeInput;
+  endTime_lte?: DateTimeInput;
+  endTime_gt?: DateTimeInput;
+  endTime_gte?: DateTimeInput;
+  interval?: Int;
+  interval_not?: Int;
+  interval_in?: Int[] | Int;
+  interval_not_in?: Int[] | Int;
+  interval_lt?: Int;
+  interval_lte?: Int;
+  interval_gt?: Int;
+  interval_gte?: Int;
+  respondents_every?: RespondentWhereInput;
+  respondents_some?: RespondentWhereInput;
+  respondents_none?: RespondentWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: ShowWhereInput[] | ShowWhereInput;
+  OR?: ShowWhereInput[] | ShowWhereInput;
+  NOT?: ShowWhereInput[] | ShowWhereInput;
+}
+
+export interface ShowUpdatedatesInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
+
+export interface ShowSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ShowWhereInput;
+  AND?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
+  OR?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
+  NOT?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
+}
+
+export interface RespondentCreateInput {
+  anonymousName?: String;
+  user?: UserCreateOneInput;
+  role?: String;
+  response?: RespondentCreateresponseInput;
+}
+
+export interface RespondentUpdateDataInput {
+  anonymousName?: String;
+  user?: UserUpdateOneInput;
+  role?: String;
+  response?: RespondentUpdateresponseInput;
 }
 
 export interface RespondentWhereInput {
@@ -329,74 +532,16 @@ export interface RespondentWhereInput {
   NOT?: RespondentWhereInput[] | RespondentWhereInput;
 }
 
-export interface RespondentCreateManyInput {
-  create?: RespondentCreateInput[] | RespondentCreateInput;
-  connect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
-}
-
 export interface RespondentCreateresponseInput {
   set?: DateTimeInput[] | DateTimeInput;
 }
 
-export interface ShowCreateInput {
-  slug: String;
-  name: String;
-  isPrivate?: Boolean;
-  isReadOnly?: Boolean;
-  areResponsesHidden?: Boolean;
-  startDate: DateTimeInput;
-  endDate: DateTimeInput;
-  interval: Int;
-  respondents?: RespondentCreateManyInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
+export interface UserCreateInput {
   uid?: String;
-  email?: String;
-}>;
-
-export interface RespondentSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: RespondentWhereInput;
-  AND?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
-  OR?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
-  NOT?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
+  email: String;
+  name?: String;
+  isPremium?: Boolean;
 }
-
-export interface RespondentUpdateresponseInput {
-  set?: DateTimeInput[] | DateTimeInput;
-}
-
-export interface RespondentUpsertWithWhereUniqueNestedInput {
-  where: RespondentWhereUniqueInput;
-  update: RespondentUpdateDataInput;
-  create: RespondentCreateInput;
-}
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export type ShowWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  slug?: String;
-}>;
 
 export interface UserUpdateDataInput {
   uid?: String;
@@ -405,102 +550,16 @@ export interface UserUpdateDataInput {
   isPremium?: Boolean;
 }
 
-export interface ShowWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  slug?: String;
-  slug_not?: String;
-  slug_in?: String[] | String;
-  slug_not_in?: String[] | String;
-  slug_lt?: String;
-  slug_lte?: String;
-  slug_gt?: String;
-  slug_gte?: String;
-  slug_contains?: String;
-  slug_not_contains?: String;
-  slug_starts_with?: String;
-  slug_not_starts_with?: String;
-  slug_ends_with?: String;
-  slug_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  isPrivate?: Boolean;
-  isPrivate_not?: Boolean;
-  isReadOnly?: Boolean;
-  isReadOnly_not?: Boolean;
-  areResponsesHidden?: Boolean;
-  areResponsesHidden_not?: Boolean;
-  startDate?: DateTimeInput;
-  startDate_not?: DateTimeInput;
-  startDate_in?: DateTimeInput[] | DateTimeInput;
-  startDate_not_in?: DateTimeInput[] | DateTimeInput;
-  startDate_lt?: DateTimeInput;
-  startDate_lte?: DateTimeInput;
-  startDate_gt?: DateTimeInput;
-  startDate_gte?: DateTimeInput;
-  endDate?: DateTimeInput;
-  endDate_not?: DateTimeInput;
-  endDate_in?: DateTimeInput[] | DateTimeInput;
-  endDate_not_in?: DateTimeInput[] | DateTimeInput;
-  endDate_lt?: DateTimeInput;
-  endDate_lte?: DateTimeInput;
-  endDate_gt?: DateTimeInput;
-  endDate_gte?: DateTimeInput;
-  interval?: Int;
-  interval_not?: Int;
-  interval_in?: Int[] | Int;
-  interval_not_in?: Int[] | Int;
-  interval_lt?: Int;
-  interval_lte?: Int;
-  interval_gt?: Int;
-  interval_gte?: Int;
-  respondents_every?: RespondentWhereInput;
-  respondents_some?: RespondentWhereInput;
-  respondents_none?: RespondentWhereInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: ShowWhereInput[] | ShowWhereInput;
-  OR?: ShowWhereInput[] | ShowWhereInput;
-  NOT?: ShowWhereInput[] | ShowWhereInput;
+export interface RespondentUpdateWithWhereUniqueNestedInput {
+  where: RespondentWhereUniqueInput;
+  data: RespondentUpdateDataInput;
 }
 
-export interface UserUpdateOneInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
+export interface UserUpdateInput {
+  uid?: String;
+  email?: String;
+  name?: String;
+  isPremium?: Boolean;
 }
 
 export interface UserWhereInput {
@@ -575,50 +634,6 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface UserUpdateInput {
-  uid?: String;
-  email?: String;
-  name?: String;
-  isPremium?: Boolean;
-}
-
-export interface UserCreateInput {
-  uid?: String;
-  email: String;
-  name?: String;
-  isPremium?: Boolean;
-}
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface RespondentUpdateInput {
-  anonymousName?: String;
-  user?: UserUpdateOneInput;
-  role?: String;
-  response?: RespondentUpdateresponseInput;
-}
-
-export interface RespondentUpdateDataInput {
-  anonymousName?: String;
-  user?: UserUpdateOneInput;
-  role?: String;
-  response?: RespondentUpdateresponseInput;
-}
-
-export interface ShowSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ShowWhereInput;
-  AND?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
-  OR?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
-  NOT?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
-}
-
 export interface RespondentUpdateManyInput {
   create?: RespondentCreateInput[] | RespondentCreateInput;
   update?:
@@ -630,11 +645,6 @@ export interface RespondentUpdateManyInput {
   delete?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
   connect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
   disconnect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
-}
-
-export interface RespondentUpdateWithWhereUniqueNestedInput {
-  where: RespondentWhereUniqueInput;
-  data: RespondentUpdateDataInput;
 }
 
 export interface NodeNode {
@@ -731,8 +741,9 @@ export interface ShowNode {
   isPrivate: Boolean;
   isReadOnly: Boolean;
   areResponsesHidden: Boolean;
-  startDate: DateTimeOutput;
-  endDate: DateTimeOutput;
+  dates: DateTimeOutput[];
+  startTime: DateTimeOutput;
+  endTime: DateTimeOutput;
   interval: Int;
   createdAt: DateTimeOutput;
 }
@@ -744,8 +755,9 @@ export interface Show extends Promise<ShowNode>, Fragmentable {
   isPrivate: () => Promise<Boolean>;
   isReadOnly: () => Promise<Boolean>;
   areResponsesHidden: () => Promise<Boolean>;
-  startDate: () => Promise<DateTimeOutput>;
-  endDate: () => Promise<DateTimeOutput>;
+  dates: () => Promise<DateTimeOutput[]>;
+  startTime: () => Promise<DateTimeOutput>;
+  endTime: () => Promise<DateTimeOutput>;
   interval: () => Promise<Int>;
   respondents: <T = FragmentableArray<RespondentNode>>(
     args?: {
@@ -770,8 +782,9 @@ export interface ShowSubscription
   isPrivate: () => Promise<AsyncIterator<Boolean>>;
   isReadOnly: () => Promise<AsyncIterator<Boolean>>;
   areResponsesHidden: () => Promise<AsyncIterator<Boolean>>;
-  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
-  endDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  dates: () => Promise<AsyncIterator<DateTimeOutput[]>>;
+  startTime: () => Promise<AsyncIterator<DateTimeOutput>>;
+  endTime: () => Promise<AsyncIterator<DateTimeOutput>>;
   interval: () => Promise<AsyncIterator<Int>>;
   respondents: <T = Promise<AsyncIterator<RespondentSubscription>>>(
     args?: {
@@ -819,22 +832,18 @@ export interface AggregateUserSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface UserConnectionNode {}
-
-export interface UserConnection
-  extends Promise<UserConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<UserEdgeNode>>() => T;
-  aggregate: <T = AggregateUser>() => T;
+export interface BatchPayloadNode {
+  count: Long;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnectionNode>>,
+export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayloadNode>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
 export interface RespondentEdgeNode {
@@ -855,18 +864,22 @@ export interface RespondentEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface BatchPayloadNode {
-  count: Long;
-}
+export interface UserConnectionNode {}
 
-export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayloadNode>>,
+export interface UserConnection
+  extends Promise<UserConnectionNode>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = FragmentableArray<UserEdgeNode>>() => T;
+  aggregate: <T = AggregateUser>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface PageInfoNode {
@@ -1068,8 +1081,9 @@ export interface ShowPreviousValuesNode {
   isPrivate: Boolean;
   isReadOnly: Boolean;
   areResponsesHidden: Boolean;
-  startDate: DateTimeOutput;
-  endDate: DateTimeOutput;
+  dates: DateTimeOutput[];
+  startTime: DateTimeOutput;
+  endTime: DateTimeOutput;
   interval: Int;
   createdAt: DateTimeOutput;
 }
@@ -1083,8 +1097,9 @@ export interface ShowPreviousValues
   isPrivate: () => Promise<Boolean>;
   isReadOnly: () => Promise<Boolean>;
   areResponsesHidden: () => Promise<Boolean>;
-  startDate: () => Promise<DateTimeOutput>;
-  endDate: () => Promise<DateTimeOutput>;
+  dates: () => Promise<DateTimeOutput[]>;
+  startTime: () => Promise<DateTimeOutput>;
+  endTime: () => Promise<DateTimeOutput>;
   interval: () => Promise<Int>;
   createdAt: () => Promise<DateTimeOutput>;
 }
@@ -1098,8 +1113,9 @@ export interface ShowPreviousValuesSubscription
   isPrivate: () => Promise<AsyncIterator<Boolean>>;
   isReadOnly: () => Promise<AsyncIterator<Boolean>>;
   areResponsesHidden: () => Promise<AsyncIterator<Boolean>>;
-  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
-  endDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  dates: () => Promise<AsyncIterator<DateTimeOutput[]>>;
+  startTime: () => Promise<AsyncIterator<DateTimeOutput>>;
+  endTime: () => Promise<AsyncIterator<DateTimeOutput>>;
   interval: () => Promise<AsyncIterator<Int>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1143,17 +1159,17 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 export type ID_Input = string | number;
 export type ID_Output = string;
 
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
+export type Long = string;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
 
-export type Long = string;
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 

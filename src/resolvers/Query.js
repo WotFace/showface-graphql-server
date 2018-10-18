@@ -30,8 +30,9 @@ const Query = {
                 isPrivate
                 isReadOnly
                 areResponsesHidden
-                startDate
-                endDate
+                startTime
+                endTime
+                dates
                 interval
                 respondents {
                     id
