@@ -150,42 +150,28 @@ const Mutation = {
                 }
 
                 if (data.dates) {
-                    const newData = _.update(data, 'dates', function(a) { return { set: a }});;
-
-                    const editShowWithAdmin = await prisma.updateShow({
-                        where: { slug: where.slug },
-                        data: newData
-                    })
-    
-                    return editShowWithAdmin
-                } else {
-                    const editShowWithAdmin = await prisma.updateShow({
-                        where: { slug: where.slug },
-                        data: data
-                    })
-    
-                    return editShowWithAdmin
+                    data = _.update(data, 'dates', function (a) { return { set: a } })
                 }
+
+                const editShowWithAdmin = await prisma.updateShow({
+                    where: { slug: where.slug },
+                    data: newData
+                })
+
+                return editShowWithAdmin
             } else {
                 const showData = _.omit(data, ['isReadOnly', 'isPrivate', 'areResponsesHidden'])
 
                 if (showData.dates) {
-                    const newData = _.update(showData, 'dates', function(a) { return { set: a }});
-
-                    const editShowWithoutAdmin = await prisma.updateShow({
-                        where: { slug: where.slug },
-                        data: newData
-                    })
-    
-                    return editShowWithoutAdmin
-                } else {
-                    const editShowWithoutAdmin = await prisma.updateShow({
-                        where: { slug: where.slug },
-                        data: showData
-                    })
-    
-                    return editShowWithoutAdmin
+                    showData = _.update(showData, 'dates', function (a) { return { set: a } })
                 }
+
+                const editShowWithoutAdmin = await prisma.updateShow({
+                    where: { slug: where.slug },
+                    data: newData
+                })
+
+                return editShowWithoutAdmin
             }
         } catch (err) {
             console.log(err)
