@@ -92,6 +92,8 @@ const Mutation = {
             `
             // if auth exists, means that the user must be verified before being
             // able to create a show
+            data = _.update(data, "dates", function (a) { return { set: a } })
+
             if (auth != null) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)
 
@@ -155,7 +157,7 @@ const Mutation = {
 
                 const editShowWithAdmin = await prisma.updateShow({
                     where: { slug: where.slug },
-                    data: newData
+                    data: data
                 })
 
                 return editShowWithAdmin
@@ -168,7 +170,7 @@ const Mutation = {
 
                 const editShowWithoutAdmin = await prisma.updateShow({
                     where: { slug: where.slug },
-                    data: newData
+                    data: data
                 })
 
                 return editShowWithoutAdmin
