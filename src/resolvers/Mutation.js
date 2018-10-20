@@ -653,8 +653,9 @@ const Mutation = {
                 name
                 interval
                 areResponsesHidden
-                endDate
-                startDate
+                startTime
+                endTime
+                dates
                 isPrivate
                 isReadOnly
                 respondents {
@@ -803,8 +804,9 @@ const Mutation = {
                 name
                 interval
                 areResponsesHidden
-                endDate
-                startDate
+                startTime
+                endTime
+                dates
                 isPrivate
                 isReadOnly
                 respondents {
