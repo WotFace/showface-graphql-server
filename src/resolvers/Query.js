@@ -81,7 +81,8 @@ const Query = {
                     }
                 },
                 first: first ? first : 10,
-                skip: skip ? skip : 0
+                skip: skip ? skip : 0,
+                orderBy: "createdAt_DESC"
             })
 
             return userShows
