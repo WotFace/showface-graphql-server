@@ -76,7 +76,7 @@ const Query = {
             // default is getting first 10 if first and skip not specified
             const userShows = await prisma.shows({
                 where: {
-                    respondents_every: {
+                    respondents_some: {
                         user: { email: user.email }
                     }
                 },
