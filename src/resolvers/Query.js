@@ -72,6 +72,32 @@ const Query = {
             // user must be signed in and verified first
             const user = await authenticate.verifyUser(auth.token, auth.uid)
 
+            const fragment = `
+            fragment QueryShowOnShow on Show {
+                id
+                slug
+                name
+                isPrivate
+                isReadOnly
+                areResponsesHidden
+                startTime
+                endTime
+                dates
+                interval
+                respondents {
+                    id
+                    user {
+                        name
+                        email
+                    }
+                    anonymousName
+                    response
+                    role
+                }
+                createdAt
+            }
+            `
+
             // we will not get the respondents here since that won't be economical
             // default is getting first 10 if first and skip not specified
             const userShows = await prisma.shows({
@@ -83,7 +109,7 @@ const Query = {
                 first: first ? first : 10,
                 skip: skip ? skip : 0,
                 orderBy: "createdAt_DESC"
-            })
+            }).$fragment(fragment)
 
             return userShows
         } catch (err) {
