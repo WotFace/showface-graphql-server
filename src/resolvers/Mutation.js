@@ -63,8 +63,7 @@ const Mutation = {
     // creating some new show
     createNewShow: async function (parent, { auth, data }, context, info) {
         try {
-            const slugWordsNo = Math.floor(Math.random() * 1.999 + 3)
-            const randomUniqueSlug = randomWords({ exactly: slugWordsNo, join: '-' })
+            const randomUniqueSlug = randomWords({ exactly: 5, join: '-' })
 
             const fragment = `
             fragment CreateNewShowOnShow on Show {
