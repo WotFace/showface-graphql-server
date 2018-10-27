@@ -36,7 +36,7 @@ const Mutation = {
             return createUser
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -56,7 +56,7 @@ const Mutation = {
             return updateUser
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -124,7 +124,7 @@ const Mutation = {
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -147,7 +147,7 @@ const Mutation = {
                 })
 
                 if (!userIsAdmin) {
-                    return new Error("UserNoPrivilegeError")
+                    throw new Error("UserNoPrivilegeError")
                 }
 
                 if (data.dates) {
@@ -176,7 +176,7 @@ const Mutation = {
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -198,7 +198,7 @@ const Mutation = {
                 })
 
                 if (!userIsAdmin) {
-                    return new Error("UserNoPrivilegeError")
+                    throw new Error("UserNoPrivilegeError")
                 }
 
                 const deleteShow = await prisma.deleteShow({ slug: where.slug })
@@ -209,7 +209,7 @@ const Mutation = {
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -238,14 +238,14 @@ const Mutation = {
                 const userData = _.find(show.respondents, function (a) { return (a.user ? a.user.email : false) == user.email })
 
                 if (userData.role != "admin") {
-                    return new Error("UserNoPrivilegeError")
+                    throw new Error("UserNoPrivilegeError")
                 }
 
                 const respondentData = _.find(show.respondents, function (a) { return a.id == where.id })
 
                 // if the specified user is not a signed in user, then cannot be admin
                 if (!respondentData.user) {
-                    return new Error("UserNoPrivilegeError")
+                    throw new Error("UserNoPrivilegeError")
                 }
 
                 updateUserStatus = await prisma.updateShow({
@@ -262,11 +262,11 @@ const Mutation = {
 
                 return updateUserStatus
             } else {
-                return new Error("UserNoPrivilegeError")
+                throw new Error("UserNoPrivilegeError")
             }
         } catch (err) {
             console.log(err)
-            return err
+            throw new Error(err)
         }
     },
 
@@ -301,7 +301,7 @@ const Mutation = {
 
                 // check if user is admin of show
                 if (userData.role != 'admin') {
-                    return new Error("UserNoPrivilegeError")
+                    throw new Error("UserNoPrivilegeError")
                 }
 
                 // what I'm doing here is to return an array of all the emails so I can get a list of 
@@ -351,11 +351,11 @@ const Mutation = {
 
                 return addRespondents
             } else {
-                return new Error("UserNoPrivilegeError")
+                throw new Error("UserNoPrivilegeError")
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -397,7 +397,7 @@ const Mutation = {
                 })
 
                 if (!userIsAdmin) {
-                    return new Error("UserNoPrivilegeError")
+                    throw new Error("UserNoPrivilegeError")
                 }
 
                 const deleteRespondentsWithAdmin = await prisma.updateShow(deletedIdObject).$fragment(fragment)
@@ -409,7 +409,7 @@ const Mutation = {
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -435,7 +435,7 @@ const Mutation = {
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
 
             if (show.isReadOnly) {
-                return new Error("UserNotAuthorizedError")
+                throw new Error("UserNotAuthorizedError")
             }
 
             if (auth) {
@@ -444,7 +444,7 @@ const Mutation = {
 
                 // find if user exists in the respondents list, if not then reject request
                 if (show.isPrivate && !userData) {
-                    return new Error("UserNotAuthorizedError")
+                    throw new Error("UserNotAuthorizedError")
                 }
 
                 const createNewResponseWithUser = await prisma.updateShow({
@@ -464,7 +464,7 @@ const Mutation = {
                 return createNewResponseWithUser
             } else {
                 if (show.isPrivate) {
-                    return new Error("UserNotAuthorizedError")
+                    throw new Error("UserNotAuthorizedError")
                 }
 
                 const createNewResponseNotPrivate = await prisma.updateShow({
@@ -484,7 +484,7 @@ const Mutation = {
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -510,7 +510,7 @@ const Mutation = {
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
 
             if (show.isReadOnly) {
-                return new Error("UserNotAuthorizedError")
+                throw new Error("UserNotAuthorizedError")
             }
 
             // get the response that the user is trying to edit
@@ -542,11 +542,11 @@ const Mutation = {
 
                     return editResponseWithUser
                 } else {
-                    return new Error("UserNoPrivilegeError")
+                    throw new Error("UserNoPrivilegeError")
                 }
             } else {
                 if (show.isPrivate || respondentData.user != null) {
-                    return new Error("UserNotAuthorizedError")
+                    throw new Error("UserNotAuthorizedError")
                 }
 
                 const editResponseWithoutUser = await prisma.updateShow({
@@ -567,7 +567,7 @@ const Mutation = {
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -592,7 +592,7 @@ const Mutation = {
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
 
             if (show.isReadOnly) {
-                return null
+                throw new Error("UserNotAuthorizedError")
             }
 
             const respondentData = _.find(show.respondents, function (b) { return b.id == where.id })
@@ -624,12 +624,12 @@ const Mutation = {
 
                     return deleteResponseWhenNotCreatedAnonymously
                 } else {
-                    return new Error("UserNoPrivilegeError")
+                    throw new Error("UserNoPrivilegeError")
                 }
 
             } else {
                 if (show.isPrivate || respondentData.user != null) {
-                    return new Error("UserNotAuthorizedError")
+                    throw new Error("UserNotAuthorizedError")
                 }
 
                 const deleteResponseWhenCreatedAnonymously = await prisma.updateShow(deletedIdObject).$fragment(fragment)
@@ -638,7 +638,7 @@ const Mutation = {
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -679,11 +679,11 @@ const Mutation = {
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
 
             if (show.isReadOnly) {
-                return new Error("UserNotAuthorizedError")
+                throw new Error("UserNotAuthorizedError")
             }
 
             if (!where.name && !where.email) {
-                return new Error("BadRequestError")
+                throw new Error("BadRequestError")
             }
 
             const respondentData = _.find(show.respondents, function (b) {
@@ -698,7 +698,7 @@ const Mutation = {
 
                     // find if user exists in the respondents list, if not then reject request
                     if (show.isPrivate && !userData) {
-                        return new Error("UserNotAuthorizedError")
+                        throw new Error("UserNotAuthorizedError")
                     }
 
                     const createNewResponseWithUser = await prisma.updateShow({
@@ -718,7 +718,7 @@ const Mutation = {
                     return createNewResponseWithUser
                 } else {
                     if (show.isPrivate) {
-                        return new Error("UserNotAuthorizedError")
+                        throw new Error("UserNotAuthorizedError")
                     }
 
                     const createNewResponseNotPrivate = await prisma.updateShow({
@@ -762,12 +762,12 @@ const Mutation = {
 
                         return editResponseWithUser
                     } else {
-                        return new Error("UserNoPrivilegeError")
+                        throw new Error("UserNoPrivilegeError")
                     }
 
                 } else {
                     if (show.isPrivate || respondentData.user != null) {
-                        return new Error("UserNotAuthorizedError")
+                        throw new Error("UserNotAuthorizedError")
                     }
 
                     const editResponseWithoutUser = await prisma.updateShow({
@@ -789,7 +789,7 @@ const Mutation = {
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 
@@ -827,7 +827,7 @@ const Mutation = {
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
 
             if (show.isReadOnly) {
-                return new Error("UserNotAuthorizedError")
+                throw new Error("UserNotAuthorizedError")
             }
 
             const respondentData = _.find(show.respondents, function (b) {
@@ -862,12 +862,12 @@ const Mutation = {
 
                     return deleteResponseWhenNotCreatedAnonymously
                 } else {
-                    return new Error("UserNoPrivilegeError")
+                    throw new Error("UserNoPrivilegeError")
                 }
 
             } else {
                 if (show.isPrivate || respondentData.user != null) {
-                    return new Error("UserNotAuthorizedError")
+                    throw new Error("UserNotAuthorizedError")
                 }
 
                 const _deleteResponseWhenCreatedAnonymously = await prisma.updateShow(deletedIdObject).$fragment(fragment)
@@ -876,7 +876,7 @@ const Mutation = {
             }
         } catch (err) {
             console.log(err)
-            return
+            throw new Error(err)
         }
     },
 }

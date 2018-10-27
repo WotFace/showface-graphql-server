@@ -14,7 +14,7 @@ exports.verifyUser = async function (token, uid) {
         return user
     } catch (err) {
         console.log(err)
-        return
+        throw new Error(err)
     }
 }
 
@@ -29,6 +29,6 @@ exports.verifyUserForSignUp = async function (token, uid) {
         return decodedToken
     } catch (err) {
         console.log(err)
-        return
+        throw new Error(err)
     }
 }
