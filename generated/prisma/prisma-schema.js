@@ -267,6 +267,7 @@ type Show {
   interval: Int!
   respondents(where: RespondentWhereInput, orderBy: RespondentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Respondent!]
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ShowConnection {
@@ -334,6 +335,7 @@ type ShowPreviousValues {
   endTime: DateTime!
   interval: Int!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ShowSubscriptionPayload {
@@ -455,6 +457,14 @@ input ShowWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [ShowWhereInput!]
   OR: [ShowWhereInput!]
   NOT: [ShowWhereInput!]
