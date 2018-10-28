@@ -87,6 +87,7 @@ const Mutation = {
                     role
                 }
                 createdAt
+                updatedAt
             }
             `
             // if auth exists, means that the user must be verified before being
@@ -673,6 +674,8 @@ const Mutation = {
                     createdAt
                     updatedAt
                 }
+                createdAt
+                updatedAt
             }
             `
             // didn't use $exists because db query will shot up by quite a lot
@@ -822,6 +825,8 @@ const Mutation = {
                     createdAt
                     updatedAt
                 }
+                createdAt
+                updatedAt
             }
             `
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)

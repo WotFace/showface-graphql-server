@@ -167,6 +167,7 @@ type Show {
   interval: Int
   respondents: [Respondent!]
   createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type Respondent {

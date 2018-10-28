@@ -43,8 +43,11 @@ const Query = {
                     anonymousName
                     response
                     role
+                    createdAt
+                    updatedAt
                 }
                 createdAt
+                updatedAt
             }
             `
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
@@ -93,8 +96,11 @@ const Query = {
                     anonymousName
                     response
                     role
+                    createdAt
+                    updatedAt
                 }
                 createdAt
+                updatedAt
             }
             `
 
