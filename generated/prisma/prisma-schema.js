@@ -78,6 +78,7 @@ type Respondent {
   response: [DateTime!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+  updateDummy: Float
 }
 
 type RespondentConnection {
@@ -91,6 +92,7 @@ input RespondentCreateInput {
   user: UserCreateOneInput
   role: String
   response: RespondentCreateresponseInput
+  updateDummy: Float
 }
 
 input RespondentCreateManyInput {
@@ -118,6 +120,8 @@ enum RespondentOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  updateDummy_ASC
+  updateDummy_DESC
 }
 
 type RespondentPreviousValues {
@@ -127,6 +131,7 @@ type RespondentPreviousValues {
   response: [DateTime!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+  updateDummy: Float
 }
 
 type RespondentSubscriptionPayload {
@@ -152,6 +157,7 @@ input RespondentUpdateDataInput {
   user: UserUpdateOneInput
   role: String
   response: RespondentUpdateresponseInput
+  updateDummy: Float
 }
 
 input RespondentUpdateInput {
@@ -159,6 +165,7 @@ input RespondentUpdateInput {
   user: UserUpdateOneInput
   role: String
   response: RespondentUpdateresponseInput
+  updateDummy: Float
 }
 
 input RespondentUpdateManyInput {
@@ -245,6 +252,14 @@ input RespondentWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  updateDummy: Float
+  updateDummy_not: Float
+  updateDummy_in: [Float!]
+  updateDummy_not_in: [Float!]
+  updateDummy_lt: Float
+  updateDummy_lte: Float
+  updateDummy_gt: Float
+  updateDummy_gte: Float
   AND: [RespondentWhereInput!]
   OR: [RespondentWhereInput!]
   NOT: [RespondentWhereInput!]

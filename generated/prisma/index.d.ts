@@ -196,7 +196,9 @@ export type RespondentOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "updatedAt_DESC"
+  | "updateDummy_ASC"
+  | "updateDummy_DESC";
 
 export type ShowOrderByInput =
   | "id_ASC"
@@ -251,6 +253,19 @@ export type RespondentWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
+export interface ShowUpdatedatesInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
+
+export interface UserUpdateOneInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
 export interface ShowUpdateInput {
   slug?: String;
   name?: String;
@@ -265,228 +280,17 @@ export interface ShowUpdateInput {
   updateDummy?: Float;
 }
 
-export interface RespondentWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  anonymousName?: String;
-  anonymousName_not?: String;
-  anonymousName_in?: String[] | String;
-  anonymousName_not_in?: String[] | String;
-  anonymousName_lt?: String;
-  anonymousName_lte?: String;
-  anonymousName_gt?: String;
-  anonymousName_gte?: String;
-  anonymousName_contains?: String;
-  anonymousName_not_contains?: String;
-  anonymousName_starts_with?: String;
-  anonymousName_not_starts_with?: String;
-  anonymousName_ends_with?: String;
-  anonymousName_not_ends_with?: String;
-  user?: UserWhereInput;
-  role?: String;
-  role_not?: String;
-  role_in?: String[] | String;
-  role_not_in?: String[] | String;
-  role_lt?: String;
-  role_lte?: String;
-  role_gt?: String;
-  role_gte?: String;
-  role_contains?: String;
-  role_not_contains?: String;
-  role_starts_with?: String;
-  role_not_starts_with?: String;
-  role_ends_with?: String;
-  role_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: RespondentWhereInput[] | RespondentWhereInput;
-  OR?: RespondentWhereInput[] | RespondentWhereInput;
-  NOT?: RespondentWhereInput[] | RespondentWhereInput;
-}
-
-export interface RespondentCreateManyInput {
-  create?: RespondentCreateInput[] | RespondentCreateInput;
-  connect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
-}
-
 export interface RespondentUpdateInput {
   anonymousName?: String;
   user?: UserUpdateOneInput;
   role?: String;
   response?: RespondentUpdateresponseInput;
-}
-
-export interface ShowCreatedatesInput {
-  set?: DateTimeInput[] | DateTimeInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  uid?: String;
-  email?: String;
-}>;
-
-export interface RespondentSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: RespondentWhereInput;
-  AND?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
-  OR?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
-  NOT?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
-}
-
-export interface ShowCreateInput {
-  slug: String;
-  name: String;
-  isPrivate?: Boolean;
-  isReadOnly?: Boolean;
-  areResponsesHidden?: Boolean;
-  dates?: ShowCreatedatesInput;
-  startTime: DateTimeInput;
-  endTime: DateTimeInput;
-  interval: Int;
-  respondents?: RespondentCreateManyInput;
   updateDummy?: Float;
 }
 
-export interface RespondentUpsertWithWhereUniqueNestedInput {
-  where: RespondentWhereUniqueInput;
-  update: RespondentUpdateDataInput;
-  create: RespondentCreateInput;
-}
-
-export interface RespondentUpdateresponseInput {
-  set?: DateTimeInput[] | DateTimeInput;
-}
-
-export type ShowWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  slug?: String;
-}>;
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface RespondentUpdateManyInput {
+export interface RespondentCreateManyInput {
   create?: RespondentCreateInput[] | RespondentCreateInput;
-  update?:
-    | RespondentUpdateWithWhereUniqueNestedInput[]
-    | RespondentUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | RespondentUpsertWithWhereUniqueNestedInput[]
-    | RespondentUpsertWithWhereUniqueNestedInput;
-  delete?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
   connect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
-  disconnect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
-}
-
-export interface UserUpdateDataInput {
-  uid?: String;
-  email?: String;
-  name?: String;
-  isPremium?: Boolean;
-}
-
-export interface ShowUpdatedatesInput {
-  set?: DateTimeInput[] | DateTimeInput;
-}
-
-export interface ShowSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ShowWhereInput;
-  AND?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
-  OR?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
-  NOT?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
-}
-
-export interface RespondentUpdateDataInput {
-  anonymousName?: String;
-  user?: UserUpdateOneInput;
-  role?: String;
-  response?: RespondentUpdateresponseInput;
-}
-
-export interface RespondentCreateresponseInput {
-  set?: DateTimeInput[] | DateTimeInput;
-}
-
-export interface UserCreateInput {
-  uid?: String;
-  email: String;
-  name?: String;
-  isPremium?: Boolean;
-}
-
-export interface UserUpdateOneInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface RespondentCreateInput {
-  anonymousName?: String;
-  user?: UserCreateOneInput;
-  role?: String;
-  response?: RespondentCreateresponseInput;
-}
-
-export interface RespondentUpdateWithWhereUniqueNestedInput {
-  where: RespondentWhereUniqueInput;
-  data: RespondentUpdateDataInput;
-}
-
-export interface UserUpdateInput {
-  uid?: String;
-  email?: String;
-  name?: String;
-  isPremium?: Boolean;
 }
 
 export interface UserWhereInput {
@@ -559,6 +363,215 @@ export interface UserWhereInput {
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  uid?: String;
+  email?: String;
+}>;
+
+export interface ShowSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ShowWhereInput;
+  AND?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
+  OR?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
+  NOT?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
+}
+
+export interface ShowCreatedatesInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
+
+export interface UserUpdateInput {
+  uid?: String;
+  email?: String;
+  name?: String;
+  isPremium?: Boolean;
+}
+
+export interface ShowCreateInput {
+  slug: String;
+  name: String;
+  isPrivate?: Boolean;
+  isReadOnly?: Boolean;
+  areResponsesHidden?: Boolean;
+  dates?: ShowCreatedatesInput;
+  startTime: DateTimeInput;
+  endTime: DateTimeInput;
+  interval: Int;
+  respondents?: RespondentCreateManyInput;
+  updateDummy?: Float;
+}
+
+export interface RespondentUpdateDataInput {
+  anonymousName?: String;
+  user?: UserUpdateOneInput;
+  role?: String;
+  response?: RespondentUpdateresponseInput;
+  updateDummy?: Float;
+}
+
+export interface RespondentUpdateresponseInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
+
+export interface RespondentUpdateWithWhereUniqueNestedInput {
+  where: RespondentWhereUniqueInput;
+  data: RespondentUpdateDataInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface RespondentUpdateManyInput {
+  create?: RespondentCreateInput[] | RespondentCreateInput;
+  update?:
+    | RespondentUpdateWithWhereUniqueNestedInput[]
+    | RespondentUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | RespondentUpsertWithWhereUniqueNestedInput[]
+    | RespondentUpsertWithWhereUniqueNestedInput;
+  delete?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
+  connect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
+  disconnect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface RespondentUpsertWithWhereUniqueNestedInput {
+  where: RespondentWhereUniqueInput;
+  update: RespondentUpdateDataInput;
+  create: RespondentCreateInput;
+}
+
+export interface RespondentCreateresponseInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
+
+export interface UserCreateInput {
+  uid?: String;
+  email: String;
+  name?: String;
+  isPremium?: Boolean;
+}
+
+export interface UserUpdateDataInput {
+  uid?: String;
+  email?: String;
+  name?: String;
+  isPremium?: Boolean;
+}
+
+export interface RespondentCreateInput {
+  anonymousName?: String;
+  user?: UserCreateOneInput;
+  role?: String;
+  response?: RespondentCreateresponseInput;
+  updateDummy?: Float;
+}
+
+export type ShowWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  slug?: String;
+}>;
+
+export interface RespondentSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: RespondentWhereInput;
+  AND?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
+  OR?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
+  NOT?: RespondentSubscriptionWhereInput[] | RespondentSubscriptionWhereInput;
+}
+
+export interface RespondentWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  anonymousName?: String;
+  anonymousName_not?: String;
+  anonymousName_in?: String[] | String;
+  anonymousName_not_in?: String[] | String;
+  anonymousName_lt?: String;
+  anonymousName_lte?: String;
+  anonymousName_gt?: String;
+  anonymousName_gte?: String;
+  anonymousName_contains?: String;
+  anonymousName_not_contains?: String;
+  anonymousName_starts_with?: String;
+  anonymousName_not_starts_with?: String;
+  anonymousName_ends_with?: String;
+  anonymousName_not_ends_with?: String;
+  user?: UserWhereInput;
+  role?: String;
+  role_not?: String;
+  role_in?: String[] | String;
+  role_not_in?: String[] | String;
+  role_lt?: String;
+  role_lte?: String;
+  role_gt?: String;
+  role_gte?: String;
+  role_contains?: String;
+  role_not_contains?: String;
+  role_starts_with?: String;
+  role_not_starts_with?: String;
+  role_ends_with?: String;
+  role_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  updateDummy?: Float;
+  updateDummy_not?: Float;
+  updateDummy_in?: Float[] | Float;
+  updateDummy_not_in?: Float[] | Float;
+  updateDummy_lt?: Float;
+  updateDummy_lte?: Float;
+  updateDummy_gt?: Float;
+  updateDummy_gte?: Float;
+  AND?: RespondentWhereInput[] | RespondentWhereInput;
+  OR?: RespondentWhereInput[] | RespondentWhereInput;
+  NOT?: RespondentWhereInput[] | RespondentWhereInput;
 }
 
 export interface ShowWhereInput {
@@ -701,6 +714,58 @@ export interface UserPreviousValuesSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
+export interface ShowConnectionNode {}
+
+export interface ShowConnection
+  extends Promise<ShowConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = FragmentableArray<ShowEdgeNode>>() => T;
+  aggregate: <T = AggregateShow>() => T;
+}
+
+export interface ShowConnectionSubscription
+  extends Promise<AsyncIterator<ShowConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ShowEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateShowSubscription>() => T;
+}
+
+export interface RespondentPreviousValuesNode {
+  id: ID_Output;
+  anonymousName?: String;
+  role: String;
+  response: DateTimeOutput[];
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  updateDummy?: Float;
+}
+
+export interface RespondentPreviousValues
+  extends Promise<RespondentPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  anonymousName: () => Promise<String>;
+  role: () => Promise<String>;
+  response: () => Promise<DateTimeOutput[]>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  updateDummy: () => Promise<Float>;
+}
+
+export interface RespondentPreviousValuesSubscription
+  extends Promise<AsyncIterator<RespondentPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  anonymousName: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<String>>;
+  response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateDummy: () => Promise<AsyncIterator<Float>>;
+}
+
 export interface UserNode {
   id: ID_Output;
   uid?: String;
@@ -728,60 +793,6 @@ export interface UserSubscription
   name: () => Promise<AsyncIterator<String>>;
   isPremium: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface RespondentPreviousValuesNode {
-  id: ID_Output;
-  anonymousName?: String;
-  role: String;
-  response: DateTimeOutput[];
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface RespondentPreviousValues
-  extends Promise<RespondentPreviousValuesNode>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  anonymousName: () => Promise<String>;
-  role: () => Promise<String>;
-  response: () => Promise<DateTimeOutput[]>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface RespondentPreviousValuesSubscription
-  extends Promise<AsyncIterator<RespondentPreviousValuesNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  anonymousName: () => Promise<AsyncIterator<String>>;
-  role: () => Promise<AsyncIterator<String>>;
-  response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface ShowSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface ShowSubscriptionPayload
-  extends Promise<ShowSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = Show>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ShowPreviousValues>() => T;
-}
-
-export interface ShowSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ShowSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ShowSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ShowPreviousValuesSubscription>() => T;
 }
 
 export interface AggregateRespondentNode {
@@ -872,38 +883,43 @@ export interface ShowSubscription
   updateDummy: () => Promise<AsyncIterator<Float>>;
 }
 
-export interface UserConnectionNode {}
-
-export interface UserConnection
-  extends Promise<UserConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<UserEdgeNode>>() => T;
-  aggregate: <T = AggregateUser>() => T;
+export interface UserEdgeNode {
+  cursor: String;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+export interface UserEdge extends Promise<UserEdgeNode>, Fragmentable {
+  node: <T = User>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateUserNode {
-  count: Int;
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdgeNode>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateUser
-  extends Promise<AggregateUserNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
+export interface ShowSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
 }
 
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUserNode>>,
+export interface ShowSubscriptionPayload
+  extends Promise<ShowSubscriptionPayloadNode>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  mutation: () => Promise<MutationType>;
+  node: <T = Show>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ShowPreviousValues>() => T;
+}
+
+export interface ShowSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ShowSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ShowSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ShowPreviousValuesSubscription>() => T;
 }
 
 export interface UserSubscriptionPayloadNode {
@@ -944,167 +960,6 @@ export interface RespondentEdgeSubscription
   extends Promise<AsyncIterator<RespondentEdgeNode>>,
     Fragmentable {
   node: <T = RespondentSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateShowNode {
-  count: Int;
-}
-
-export interface AggregateShow
-  extends Promise<AggregateShowNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateShowSubscription
-  extends Promise<AsyncIterator<AggregateShowNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ShowConnectionNode {}
-
-export interface ShowConnection
-  extends Promise<ShowConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<ShowEdgeNode>>() => T;
-  aggregate: <T = AggregateShow>() => T;
-}
-
-export interface ShowConnectionSubscription
-  extends Promise<AsyncIterator<ShowConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ShowEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateShowSubscription>() => T;
-}
-
-export interface RespondentSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface RespondentSubscriptionPayload
-  extends Promise<RespondentSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = Respondent>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = RespondentPreviousValues>() => T;
-}
-
-export interface RespondentSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<RespondentSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = RespondentSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = RespondentPreviousValuesSubscription>() => T;
-}
-
-export interface RespondentNode {
-  id: ID_Output;
-  anonymousName?: String;
-  role: String;
-  response: DateTimeOutput[];
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface Respondent extends Promise<RespondentNode>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  anonymousName: () => Promise<String>;
-  user: <T = User>() => T;
-  role: () => Promise<String>;
-  response: () => Promise<DateTimeOutput[]>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface RespondentSubscription
-  extends Promise<AsyncIterator<RespondentNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  anonymousName: () => Promise<AsyncIterator<String>>;
-  user: <T = UserSubscription>() => T;
-  role: () => Promise<AsyncIterator<String>>;
-  response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface RespondentConnectionNode {}
-
-export interface RespondentConnection
-  extends Promise<RespondentConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = FragmentableArray<RespondentEdgeNode>>() => T;
-  aggregate: <T = AggregateRespondent>() => T;
-}
-
-export interface RespondentConnectionSubscription
-  extends Promise<AsyncIterator<RespondentConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<RespondentEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateRespondentSubscription>() => T;
-}
-
-export interface PageInfoNode {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfoNode>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserEdgeNode {
-  cursor: String;
-}
-
-export interface UserEdge extends Promise<UserEdgeNode>, Fragmentable {
-  node: <T = User>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdgeNode>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ShowEdgeNode {
-  cursor: String;
-}
-
-export interface ShowEdge extends Promise<ShowEdgeNode>, Fragmentable {
-  node: <T = Show>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ShowEdgeSubscription
-  extends Promise<AsyncIterator<ShowEdgeNode>>,
-    Fragmentable {
-  node: <T = ShowSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -1160,6 +1015,170 @@ export interface ShowPreviousValuesSubscription
   updateDummy: () => Promise<AsyncIterator<Float>>;
 }
 
+export interface ShowEdgeNode {
+  cursor: String;
+}
+
+export interface ShowEdge extends Promise<ShowEdgeNode>, Fragmentable {
+  node: <T = Show>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ShowEdgeSubscription
+  extends Promise<AsyncIterator<ShowEdgeNode>>,
+    Fragmentable {
+  node: <T = ShowSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface RespondentSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface RespondentSubscriptionPayload
+  extends Promise<RespondentSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = Respondent>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = RespondentPreviousValues>() => T;
+}
+
+export interface RespondentSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<RespondentSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = RespondentSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = RespondentPreviousValuesSubscription>() => T;
+}
+
+export interface RespondentNode {
+  id: ID_Output;
+  anonymousName?: String;
+  role: String;
+  response: DateTimeOutput[];
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  updateDummy?: Float;
+}
+
+export interface Respondent extends Promise<RespondentNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  anonymousName: () => Promise<String>;
+  user: <T = User>() => T;
+  role: () => Promise<String>;
+  response: () => Promise<DateTimeOutput[]>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  updateDummy: () => Promise<Float>;
+}
+
+export interface RespondentSubscription
+  extends Promise<AsyncIterator<RespondentNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  anonymousName: () => Promise<AsyncIterator<String>>;
+  user: <T = UserSubscription>() => T;
+  role: () => Promise<AsyncIterator<String>>;
+  response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateDummy: () => Promise<AsyncIterator<Float>>;
+}
+
+export interface RespondentConnectionNode {}
+
+export interface RespondentConnection
+  extends Promise<RespondentConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = FragmentableArray<RespondentEdgeNode>>() => T;
+  aggregate: <T = AggregateRespondent>() => T;
+}
+
+export interface RespondentConnectionSubscription
+  extends Promise<AsyncIterator<RespondentConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<RespondentEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateRespondentSubscription>() => T;
+}
+
+export interface PageInfoNode {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfoNode>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateUserNode {
+  count: Int;
+}
+
+export interface AggregateUser
+  extends Promise<AggregateUserNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUserNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AggregateShowNode {
+  count: Int;
+}
+
+export interface AggregateShow
+  extends Promise<AggregateShowNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateShowSubscription
+  extends Promise<AsyncIterator<AggregateShowNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnectionNode {}
+
+export interface UserConnection
+  extends Promise<UserConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = FragmentableArray<UserEdgeNode>>() => T;
+  aggregate: <T = AggregateUser>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
 export interface BatchPayloadNode {
   count: Long;
 }
@@ -1185,10 +1204,9 @@ DateTime scalar output type, which is always a string
 export type DateTimeOutput = string;
 
 /*
-The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
-export type ID_Input = string | number;
-export type ID_Output = string;
+export type Float = number;
 
 export type Long = string;
 
@@ -1203,9 +1221,10 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
-The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
-export type Float = number;
+export type ID_Input = string | number;
+export type ID_Output = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 

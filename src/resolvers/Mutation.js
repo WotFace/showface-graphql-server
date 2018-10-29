@@ -540,6 +540,7 @@ const Mutation = {
                                 update: {
                                     where: { id: where.id },
                                     data: {
+                                        updateDummy: Math.random(),
                                         response: { set: data.response }
                                     }
                                 }
@@ -564,6 +565,7 @@ const Mutation = {
                             update: {
                                 where: { id: where.id, },
                                 data: {
+                                    updateDummy: Math.random(),
                                     response: { set: data.response }
                                 }
                             }
@@ -613,6 +615,7 @@ const Mutation = {
                         update: {
                             where: { id: respondentData.id },
                             data: {
+                                updateDummy: Math.random(),
                                 response: { set: [] }
                             }
                         }
@@ -767,6 +770,7 @@ const Mutation = {
                                     update: {
                                         where: { id: respondentData.id },
                                         data: {
+                                            updateDummy: Math.random(),
                                             response: { set: data.response }
                                         }
                                     }
@@ -792,6 +796,7 @@ const Mutation = {
                                 update: {
                                     where: { id: respondentData.id, },
                                     data: {
+                                        updateDummy: Math.random(),
                                         response: { set: data.response }
                                     }
                                 }
@@ -860,6 +865,7 @@ const Mutation = {
                         update: {
                             where: { id: respondentData.id },
                             data: {
+                                updateDummy: Math.random(),
                                 response: { set: [] }
                             }
                         }
