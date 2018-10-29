@@ -252,6 +252,7 @@ const Mutation = {
                 updateUserStatus = await prisma.updateShow({
                     where: { slug: where.slug },
                     data: {
+                        updateDummy: Math.random(),
                         respondents: {
                             update: {
                                 where: { id: respondentData.id },
@@ -344,6 +345,7 @@ const Mutation = {
                 const addRespondents = await prisma.updateShow({
                     where: { slug: where.slug },
                     data: {
+                        updateDummy: Math.random(),
                         respondents: { create: respondentsArray }
                     }
                 }).$fragment(fragment)
@@ -382,6 +384,7 @@ const Mutation = {
             const deletedIdObject = {
                 where: { slug: where.slug },
                 data: {
+                    updateDummy: Math.random(),
                     respondents: { delete: where.id.map(function (a) { return { id: a } }) }
                 }
             }
@@ -451,6 +454,7 @@ const Mutation = {
                 const createNewResponseWithUser = await prisma.updateShow({
                     where: { slug: where.slug },
                     data: {
+                        updateDummy: Math.random(),
                         respondents: {
                             create: {
                                 response: { set: data.response },
@@ -471,6 +475,7 @@ const Mutation = {
                 const createNewResponseNotPrivate = await prisma.updateShow({
                     where: { slug: where.slug },
                     data: {
+                        updateDummy: Math.random(),
                         respondents: {
                             create: {
                                 response: { set: data.response },
@@ -530,6 +535,7 @@ const Mutation = {
                     const editResponseWithUser = await prisma.updateShow({
                         where: { slug: where.slug },
                         data: {
+                            updateDummy: Math.random(),
                             respondents: {
                                 update: {
                                     where: { id: where.id },
@@ -553,6 +559,7 @@ const Mutation = {
                 const editResponseWithoutUser = await prisma.updateShow({
                     where: { slug: where.slug },
                     data: {
+                        updateDummy: Math.random(),
                         respondents: {
                             update: {
                                 where: { id: where.id, },
@@ -601,6 +608,7 @@ const Mutation = {
             const deletedIdObject = {
                 where: { slug: where.slug },
                 data: {
+                    updateDummy: Math.random(),
                     respondents: {
                         update: {
                             where: { id: respondentData.id },
@@ -707,6 +715,7 @@ const Mutation = {
                     const createNewResponseWithUser = await prisma.updateShow({
                         where: { slug: where.slug },
                         data: {
+                            updateDummy: Math.random(),
                             respondents: {
                                 create: {
                                     response: { set: data.response },
@@ -727,6 +736,7 @@ const Mutation = {
                     const createNewResponseNotPrivate = await prisma.updateShow({
                         where: { slug: where.slug },
                         data: {
+                            updateDummy: Math.random(),
                             respondents: {
                                 create: {
                                     response: { set: data.response },
@@ -752,6 +762,7 @@ const Mutation = {
                         const editResponseWithUser = await prisma.updateShow({
                             where: { slug: where.slug },
                             data: {
+                                updateDummy: Math.random(),
                                 respondents: {
                                     update: {
                                         where: { id: respondentData.id },
@@ -776,6 +787,7 @@ const Mutation = {
                     const editResponseWithoutUser = await prisma.updateShow({
                         where: { slug: where.slug },
                         data: {
+                            updateDummy: Math.random(),
                             respondents: {
                                 update: {
                                     where: { id: respondentData.id, },
@@ -843,6 +855,7 @@ const Mutation = {
             deletedIdObject = {
                 where: { slug: where.slug },
                 data: {
+                    updateDummy: Math.random(),
                     respondents: {
                         update: {
                             where: { id: respondentData.id },

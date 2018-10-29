@@ -220,7 +220,9 @@ export type ShowOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "updatedAt_DESC"
+  | "updateDummy_ASC"
+  | "updateDummy_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -260,15 +262,72 @@ export interface ShowUpdateInput {
   endTime?: DateTimeInput;
   interval?: Int;
   respondents?: RespondentUpdateManyInput;
+  updateDummy?: Float;
 }
 
-export interface UserUpdateOneInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
+export interface RespondentWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  anonymousName?: String;
+  anonymousName_not?: String;
+  anonymousName_in?: String[] | String;
+  anonymousName_not_in?: String[] | String;
+  anonymousName_lt?: String;
+  anonymousName_lte?: String;
+  anonymousName_gt?: String;
+  anonymousName_gte?: String;
+  anonymousName_contains?: String;
+  anonymousName_not_contains?: String;
+  anonymousName_starts_with?: String;
+  anonymousName_not_starts_with?: String;
+  anonymousName_ends_with?: String;
+  anonymousName_not_ends_with?: String;
+  user?: UserWhereInput;
+  role?: String;
+  role_not?: String;
+  role_in?: String[] | String;
+  role_not_in?: String[] | String;
+  role_lt?: String;
+  role_lte?: String;
+  role_gt?: String;
+  role_gte?: String;
+  role_contains?: String;
+  role_not_contains?: String;
+  role_starts_with?: String;
+  role_not_starts_with?: String;
+  role_ends_with?: String;
+  role_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: RespondentWhereInput[] | RespondentWhereInput;
+  OR?: RespondentWhereInput[] | RespondentWhereInput;
+  NOT?: RespondentWhereInput[] | RespondentWhereInput;
 }
 
 export interface RespondentCreateManyInput {
@@ -283,11 +342,9 @@ export interface RespondentUpdateInput {
   response?: RespondentUpdateresponseInput;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  uid?: String;
-  email?: String;
-}>;
+export interface ShowCreatedatesInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
 
 export interface UserSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
@@ -300,9 +357,11 @@ export interface UserSubscriptionWhereInput {
   NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
-export interface ShowCreatedatesInput {
-  set?: DateTimeInput[] | DateTimeInput;
-}
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  uid?: String;
+  email?: String;
+}>;
 
 export interface RespondentSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
@@ -326,6 +385,7 @@ export interface ShowCreateInput {
   endTime: DateTimeInput;
   interval: Int;
   respondents?: RespondentCreateManyInput;
+  updateDummy?: Float;
 }
 
 export interface RespondentUpsertWithWhereUniqueNestedInput {
@@ -346,6 +406,159 @@ export type ShowWhereUniqueInput = AtLeastOne<{
 export interface UserUpsertNestedInput {
   update: UserUpdateDataInput;
   create: UserCreateInput;
+}
+
+export interface RespondentUpdateManyInput {
+  create?: RespondentCreateInput[] | RespondentCreateInput;
+  update?:
+    | RespondentUpdateWithWhereUniqueNestedInput[]
+    | RespondentUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | RespondentUpsertWithWhereUniqueNestedInput[]
+    | RespondentUpsertWithWhereUniqueNestedInput;
+  delete?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
+  connect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
+  disconnect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
+}
+
+export interface UserUpdateDataInput {
+  uid?: String;
+  email?: String;
+  name?: String;
+  isPremium?: Boolean;
+}
+
+export interface ShowUpdatedatesInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
+
+export interface ShowSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ShowWhereInput;
+  AND?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
+  OR?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
+  NOT?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
+}
+
+export interface RespondentUpdateDataInput {
+  anonymousName?: String;
+  user?: UserUpdateOneInput;
+  role?: String;
+  response?: RespondentUpdateresponseInput;
+}
+
+export interface RespondentCreateresponseInput {
+  set?: DateTimeInput[] | DateTimeInput;
+}
+
+export interface UserCreateInput {
+  uid?: String;
+  email: String;
+  name?: String;
+  isPremium?: Boolean;
+}
+
+export interface UserUpdateOneInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface RespondentCreateInput {
+  anonymousName?: String;
+  user?: UserCreateOneInput;
+  role?: String;
+  response?: RespondentCreateresponseInput;
+}
+
+export interface RespondentUpdateWithWhereUniqueNestedInput {
+  where: RespondentWhereUniqueInput;
+  data: RespondentUpdateDataInput;
+}
+
+export interface UserUpdateInput {
+  uid?: String;
+  email?: String;
+  name?: String;
+  isPremium?: Boolean;
+}
+
+export interface UserWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  uid?: String;
+  uid_not?: String;
+  uid_in?: String[] | String;
+  uid_not_in?: String[] | String;
+  uid_lt?: String;
+  uid_lte?: String;
+  uid_gt?: String;
+  uid_gte?: String;
+  uid_contains?: String;
+  uid_not_contains?: String;
+  uid_starts_with?: String;
+  uid_not_starts_with?: String;
+  uid_ends_with?: String;
+  uid_not_ends_with?: String;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  isPremium?: Boolean;
+  isPremium_not?: Boolean;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: UserWhereInput[] | UserWhereInput;
+  OR?: UserWhereInput[] | UserWhereInput;
+  NOT?: UserWhereInput[] | UserWhereInput;
 }
 
 export interface ShowWhereInput {
@@ -440,218 +653,17 @@ export interface ShowWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
+  updateDummy?: Float;
+  updateDummy_not?: Float;
+  updateDummy_in?: Float[] | Float;
+  updateDummy_not_in?: Float[] | Float;
+  updateDummy_lt?: Float;
+  updateDummy_lte?: Float;
+  updateDummy_gt?: Float;
+  updateDummy_gte?: Float;
   AND?: ShowWhereInput[] | ShowWhereInput;
   OR?: ShowWhereInput[] | ShowWhereInput;
   NOT?: ShowWhereInput[] | ShowWhereInput;
-}
-
-export interface ShowUpdatedatesInput {
-  set?: DateTimeInput[] | DateTimeInput;
-}
-
-export interface ShowSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ShowWhereInput;
-  AND?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
-  OR?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
-  NOT?: ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput;
-}
-
-export interface RespondentCreateInput {
-  anonymousName?: String;
-  user?: UserCreateOneInput;
-  role?: String;
-  response?: RespondentCreateresponseInput;
-}
-
-export interface RespondentUpdateDataInput {
-  anonymousName?: String;
-  user?: UserUpdateOneInput;
-  role?: String;
-  response?: RespondentUpdateresponseInput;
-}
-
-export interface RespondentWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  anonymousName?: String;
-  anonymousName_not?: String;
-  anonymousName_in?: String[] | String;
-  anonymousName_not_in?: String[] | String;
-  anonymousName_lt?: String;
-  anonymousName_lte?: String;
-  anonymousName_gt?: String;
-  anonymousName_gte?: String;
-  anonymousName_contains?: String;
-  anonymousName_not_contains?: String;
-  anonymousName_starts_with?: String;
-  anonymousName_not_starts_with?: String;
-  anonymousName_ends_with?: String;
-  anonymousName_not_ends_with?: String;
-  user?: UserWhereInput;
-  role?: String;
-  role_not?: String;
-  role_in?: String[] | String;
-  role_not_in?: String[] | String;
-  role_lt?: String;
-  role_lte?: String;
-  role_gt?: String;
-  role_gte?: String;
-  role_contains?: String;
-  role_not_contains?: String;
-  role_starts_with?: String;
-  role_not_starts_with?: String;
-  role_ends_with?: String;
-  role_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: RespondentWhereInput[] | RespondentWhereInput;
-  OR?: RespondentWhereInput[] | RespondentWhereInput;
-  NOT?: RespondentWhereInput[] | RespondentWhereInput;
-}
-
-export interface RespondentCreateresponseInput {
-  set?: DateTimeInput[] | DateTimeInput;
-}
-
-export interface UserCreateInput {
-  uid?: String;
-  email: String;
-  name?: String;
-  isPremium?: Boolean;
-}
-
-export interface UserUpdateDataInput {
-  uid?: String;
-  email?: String;
-  name?: String;
-  isPremium?: Boolean;
-}
-
-export interface RespondentUpdateWithWhereUniqueNestedInput {
-  where: RespondentWhereUniqueInput;
-  data: RespondentUpdateDataInput;
-}
-
-export interface UserUpdateInput {
-  uid?: String;
-  email?: String;
-  name?: String;
-  isPremium?: Boolean;
-}
-
-export interface UserWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  uid?: String;
-  uid_not?: String;
-  uid_in?: String[] | String;
-  uid_not_in?: String[] | String;
-  uid_lt?: String;
-  uid_lte?: String;
-  uid_gt?: String;
-  uid_gte?: String;
-  uid_contains?: String;
-  uid_not_contains?: String;
-  uid_starts_with?: String;
-  uid_not_starts_with?: String;
-  uid_ends_with?: String;
-  uid_not_ends_with?: String;
-  email?: String;
-  email_not?: String;
-  email_in?: String[] | String;
-  email_not_in?: String[] | String;
-  email_lt?: String;
-  email_lte?: String;
-  email_gt?: String;
-  email_gte?: String;
-  email_contains?: String;
-  email_not_contains?: String;
-  email_starts_with?: String;
-  email_not_starts_with?: String;
-  email_ends_with?: String;
-  email_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  isPremium?: Boolean;
-  isPremium_not?: Boolean;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: UserWhereInput[] | UserWhereInput;
-  OR?: UserWhereInput[] | UserWhereInput;
-  NOT?: UserWhereInput[] | UserWhereInput;
-}
-
-export interface RespondentUpdateManyInput {
-  create?: RespondentCreateInput[] | RespondentCreateInput;
-  update?:
-    | RespondentUpdateWithWhereUniqueNestedInput[]
-    | RespondentUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | RespondentUpsertWithWhereUniqueNestedInput[]
-    | RespondentUpsertWithWhereUniqueNestedInput;
-  delete?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
-  connect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
-  disconnect?: RespondentWhereUniqueInput[] | RespondentWhereUniqueInput;
 }
 
 export interface NodeNode {
@@ -718,6 +730,37 @@ export interface UserSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
+export interface RespondentPreviousValuesNode {
+  id: ID_Output;
+  anonymousName?: String;
+  role: String;
+  response: DateTimeOutput[];
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface RespondentPreviousValues
+  extends Promise<RespondentPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  anonymousName: () => Promise<String>;
+  role: () => Promise<String>;
+  response: () => Promise<DateTimeOutput[]>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface RespondentPreviousValuesSubscription
+  extends Promise<AsyncIterator<RespondentPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  anonymousName: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<String>>;
+  response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
 export interface ShowSubscriptionPayloadNode {
   mutation: MutationType;
   updatedFields?: String[];
@@ -741,6 +784,22 @@ export interface ShowSubscriptionPayloadSubscription
   previousValues: <T = ShowPreviousValuesSubscription>() => T;
 }
 
+export interface AggregateRespondentNode {
+  count: Int;
+}
+
+export interface AggregateRespondent
+  extends Promise<AggregateRespondentNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateRespondentSubscription
+  extends Promise<AsyncIterator<AggregateRespondentNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface ShowNode {
   id: ID_Output;
   slug: String;
@@ -754,6 +813,7 @@ export interface ShowNode {
   interval: Int;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  updateDummy?: Float;
 }
 
 export interface Show extends Promise<ShowNode>, Fragmentable {
@@ -780,6 +840,7 @@ export interface Show extends Promise<ShowNode>, Fragmentable {
   ) => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  updateDummy: () => Promise<Float>;
 }
 
 export interface ShowSubscription
@@ -808,70 +869,7 @@ export interface ShowSubscription
   ) => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface AggregateRespondentNode {
-  count: Int;
-}
-
-export interface AggregateRespondent
-  extends Promise<AggregateRespondentNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateRespondentSubscription
-  extends Promise<AsyncIterator<AggregateRespondentNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateUserNode {
-  count: Int;
-}
-
-export interface AggregateUser
-  extends Promise<AggregateUserNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUserNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface BatchPayloadNode {
-  count: Long;
-}
-
-export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayloadNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface RespondentEdgeNode {
-  cursor: String;
-}
-
-export interface RespondentEdge
-  extends Promise<RespondentEdgeNode>,
-    Fragmentable {
-  node: <T = Respondent>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface RespondentEdgeSubscription
-  extends Promise<AsyncIterator<RespondentEdgeNode>>,
-    Fragmentable {
-  node: <T = RespondentSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  updateDummy: () => Promise<AsyncIterator<Float>>;
 }
 
 export interface UserConnectionNode {}
@@ -892,27 +890,61 @@ export interface UserConnectionSubscription
   aggregate: <T = AggregateUserSubscription>() => T;
 }
 
-export interface PageInfoNode {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
+export interface AggregateUserNode {
+  count: Int;
 }
 
-export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfoNode>>,
+export interface AggregateUser
+  extends Promise<AggregateUserNode>,
     Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUserNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface UserSubscriptionPayload
+  extends Promise<UserSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = User>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValues>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface RespondentEdgeNode {
+  cursor: String;
+}
+
+export interface RespondentEdge
+  extends Promise<RespondentEdgeNode>,
+    Fragmentable {
+  node: <T = Respondent>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface RespondentEdgeSubscription
+  extends Promise<AsyncIterator<RespondentEdgeNode>>,
+    Fragmentable {
+  node: <T = RespondentSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AggregateShowNode {
@@ -947,37 +979,6 @@ export interface ShowConnectionSubscription
   pageInfo: <T = PageInfoSubscription>() => T;
   edges: <T = Promise<AsyncIterator<ShowEdgeSubscription>>>() => T;
   aggregate: <T = AggregateShowSubscription>() => T;
-}
-
-export interface RespondentPreviousValuesNode {
-  id: ID_Output;
-  anonymousName?: String;
-  role: String;
-  response: DateTimeOutput[];
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface RespondentPreviousValues
-  extends Promise<RespondentPreviousValuesNode>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  anonymousName: () => Promise<String>;
-  role: () => Promise<String>;
-  response: () => Promise<DateTimeOutput[]>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface RespondentPreviousValuesSubscription
-  extends Promise<AsyncIterator<RespondentPreviousValuesNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  anonymousName: () => Promise<AsyncIterator<String>>;
-  role: () => Promise<AsyncIterator<String>>;
-  response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface RespondentSubscriptionPayloadNode {
@@ -1052,6 +1053,29 @@ export interface RespondentConnectionSubscription
   aggregate: <T = AggregateRespondentSubscription>() => T;
 }
 
+export interface PageInfoNode {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfoNode>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
 export interface UserEdgeNode {
   cursor: String;
 }
@@ -1097,6 +1121,7 @@ export interface ShowPreviousValuesNode {
   interval: Int;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  updateDummy?: Float;
 }
 
 export interface ShowPreviousValues
@@ -1114,6 +1139,7 @@ export interface ShowPreviousValues
   interval: () => Promise<Int>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  updateDummy: () => Promise<Float>;
 }
 
 export interface ShowPreviousValuesSubscription
@@ -1131,29 +1157,21 @@ export interface ShowPreviousValuesSubscription
   interval: () => Promise<AsyncIterator<Int>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updateDummy: () => Promise<AsyncIterator<Float>>;
 }
 
-export interface UserSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
+export interface BatchPayloadNode {
+  count: Long;
 }
 
-export interface UserSubscriptionPayload
-  extends Promise<UserSubscriptionPayloadNode>,
+export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayloadNode>>,
     Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = User>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValues>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
 /*
@@ -1183,6 +1201,11 @@ export type Boolean = boolean;
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
+
+/*
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
+*/
+export type Float = number;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 

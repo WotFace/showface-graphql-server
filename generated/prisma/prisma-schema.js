@@ -268,6 +268,7 @@ type Show {
   respondents(where: RespondentWhereInput, orderBy: RespondentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Respondent!]
   createdAt: DateTime!
   updatedAt: DateTime!
+  updateDummy: Float
 }
 
 type ShowConnection {
@@ -291,6 +292,7 @@ input ShowCreateInput {
   endTime: DateTime!
   interval: Int!
   respondents: RespondentCreateManyInput
+  updateDummy: Float
 }
 
 type ShowEdge {
@@ -321,6 +323,8 @@ enum ShowOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  updateDummy_ASC
+  updateDummy_DESC
 }
 
 type ShowPreviousValues {
@@ -336,6 +340,7 @@ type ShowPreviousValues {
   interval: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+  updateDummy: Float
 }
 
 type ShowSubscriptionPayload {
@@ -371,6 +376,7 @@ input ShowUpdateInput {
   endTime: DateTime
   interval: Int
   respondents: RespondentUpdateManyInput
+  updateDummy: Float
 }
 
 input ShowWhereInput {
@@ -465,6 +471,14 @@ input ShowWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  updateDummy: Float
+  updateDummy_not: Float
+  updateDummy_in: [Float!]
+  updateDummy_not_in: [Float!]
+  updateDummy_lt: Float
+  updateDummy_lte: Float
+  updateDummy_gt: Float
+  updateDummy_gte: Float
   AND: [ShowWhereInput!]
   OR: [ShowWhereInput!]
   NOT: [ShowWhereInput!]
