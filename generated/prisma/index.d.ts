@@ -197,6 +197,8 @@ export type RespondentOrderByInput =
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
+  | "isKeyRespondent_ASC"
+  | "isKeyRespondent_DESC"
   | "updateDummy_ASC"
   | "updateDummy_DESC";
 
@@ -285,6 +287,7 @@ export interface RespondentUpdateInput {
   user?: UserUpdateOneInput;
   role?: String;
   response?: RespondentUpdateresponseInput;
+  isKeyRespondent?: Boolean;
   updateDummy?: Float;
 }
 
@@ -412,6 +415,7 @@ export interface RespondentUpdateDataInput {
   user?: UserUpdateOneInput;
   role?: String;
   response?: RespondentUpdateresponseInput;
+  isKeyRespondent?: Boolean;
   updateDummy?: Float;
 }
 
@@ -482,6 +486,7 @@ export interface RespondentCreateInput {
   user?: UserCreateOneInput;
   role?: String;
   response?: RespondentCreateresponseInput;
+  isKeyRespondent?: Boolean;
   updateDummy?: Float;
 }
 
@@ -561,6 +566,8 @@ export interface RespondentWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
+  isKeyRespondent?: Boolean;
+  isKeyRespondent_not?: Boolean;
   updateDummy?: Float;
   updateDummy_not?: Float;
   updateDummy_in?: Float[] | Float;
@@ -739,6 +746,7 @@ export interface RespondentPreviousValuesNode {
   response: DateTimeOutput[];
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  isKeyRespondent?: Boolean;
   updateDummy?: Float;
 }
 
@@ -751,6 +759,7 @@ export interface RespondentPreviousValues
   response: () => Promise<DateTimeOutput[]>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  isKeyRespondent: () => Promise<Boolean>;
   updateDummy: () => Promise<Float>;
 }
 
@@ -763,6 +772,7 @@ export interface RespondentPreviousValuesSubscription
   response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  isKeyRespondent: () => Promise<AsyncIterator<Boolean>>;
   updateDummy: () => Promise<AsyncIterator<Float>>;
 }
 
@@ -1061,6 +1071,7 @@ export interface RespondentNode {
   response: DateTimeOutput[];
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  isKeyRespondent?: Boolean;
   updateDummy?: Float;
 }
 
@@ -1072,6 +1083,7 @@ export interface Respondent extends Promise<RespondentNode>, Fragmentable {
   response: () => Promise<DateTimeOutput[]>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  isKeyRespondent: () => Promise<Boolean>;
   updateDummy: () => Promise<Float>;
 }
 
@@ -1085,6 +1097,7 @@ export interface RespondentSubscription
   response: () => Promise<AsyncIterator<DateTimeOutput[]>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  isKeyRespondent: () => Promise<AsyncIterator<Boolean>>;
   updateDummy: () => Promise<AsyncIterator<Float>>;
 }
 

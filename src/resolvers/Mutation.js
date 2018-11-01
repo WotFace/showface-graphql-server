@@ -230,6 +230,11 @@ const Mutation = {
                 }
             }
             `
+
+            if (!data.role && !data.isKeyRespondent) {
+                throw new Error("BadRequestError: at least one of the fields cannot be null")
+            }
+
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
             // I didn't use the $exists from prisma because it will take me about 5 db queries, instead of 3 using this
             const adminExists = _.find(show.respondents, function (a) { return a.role == 'admin' })
@@ -249,6 +254,10 @@ const Mutation = {
                     throw new Error("UserNoPrivilegeError")
                 }
 
+                if (data.role && (data.role != 'admin' || data.role != 'member')) {
+                    throw new Error("UnprocessableEntityError")
+                }
+
                 updateUserStatus = await prisma.updateShow({
                     where: { slug: where.slug },
                     data: {
@@ -256,7 +265,7 @@ const Mutation = {
                         respondents: {
                             update: {
                                 where: { id: respondentData.id },
-                                data: { role: data.role }
+                                data: { data }
                             }
                         }
                     }
@@ -460,7 +469,8 @@ const Mutation = {
                                 response: { set: data.response },
                                 user: {
                                     connect: { email: user.email }
-                                }
+                                },
+                                isKeyRespondent: false
                             }
                         }
                     }
@@ -724,7 +734,8 @@ const Mutation = {
                                     response: { set: data.response },
                                     user: {
                                         connect: { email: user.email }
-                                    }
+                                    },
+                                    isKeyRespondent: false
                                 }
                             }
                         }
@@ -744,7 +755,8 @@ const Mutation = {
                                 create: {
                                     response: { set: data.response },
                                     anonymousName: where.name,
-                                    user: null
+                                    user: null,
+                                    isKeyRespondent: false,
                                 }
                             }
                         }

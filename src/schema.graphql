@@ -58,7 +58,8 @@ input EditShowRespondentStatusWhereInput {
 }
 
 input EditShowRespondentStatusInput {
-  role: String!
+  role: String
+  isKeyRespondent: Boolean
 }
 
 input EditShowSettingsWhereInput {
@@ -176,6 +177,7 @@ type Respondent {
   user: User
   role: String
   response: [DateTime!]
+  isKeyRespondent: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }

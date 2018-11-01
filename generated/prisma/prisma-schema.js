@@ -78,6 +78,7 @@ type Respondent {
   response: [DateTime!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+  isKeyRespondent: Boolean
   updateDummy: Float
 }
 
@@ -92,6 +93,7 @@ input RespondentCreateInput {
   user: UserCreateOneInput
   role: String
   response: RespondentCreateresponseInput
+  isKeyRespondent: Boolean
   updateDummy: Float
 }
 
@@ -120,6 +122,8 @@ enum RespondentOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  isKeyRespondent_ASC
+  isKeyRespondent_DESC
   updateDummy_ASC
   updateDummy_DESC
 }
@@ -131,6 +135,7 @@ type RespondentPreviousValues {
   response: [DateTime!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+  isKeyRespondent: Boolean
   updateDummy: Float
 }
 
@@ -157,6 +162,7 @@ input RespondentUpdateDataInput {
   user: UserUpdateOneInput
   role: String
   response: RespondentUpdateresponseInput
+  isKeyRespondent: Boolean
   updateDummy: Float
 }
 
@@ -165,6 +171,7 @@ input RespondentUpdateInput {
   user: UserUpdateOneInput
   role: String
   response: RespondentUpdateresponseInput
+  isKeyRespondent: Boolean
   updateDummy: Float
 }
 
@@ -252,6 +259,8 @@ input RespondentWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  isKeyRespondent: Boolean
+  isKeyRespondent_not: Boolean
   updateDummy: Float
   updateDummy_not: Float
   updateDummy_in: [Float!]

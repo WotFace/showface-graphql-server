@@ -43,6 +43,7 @@ const Query = {
                     anonymousName
                     response
                     role
+                    isKeyRespondent
                     createdAt
                     updatedAt
                 }
@@ -96,6 +97,7 @@ const Query = {
                     anonymousName
                     response
                     role
+                    isKeyRespondent
                     createdAt
                     updatedAt
                 }
