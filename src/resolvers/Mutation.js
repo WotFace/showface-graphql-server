@@ -231,7 +231,7 @@ const Mutation = {
             }
             `
 
-            if (!data.role && !data.isKeyRespondent) {
+            if (!data.role && data.isKeyRespondent == null) {
                 throw new Error("BadRequestError: at least one of the fields cannot be null")
             }
 
