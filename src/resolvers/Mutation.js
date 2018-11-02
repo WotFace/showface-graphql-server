@@ -265,7 +265,7 @@ const Mutation = {
                         respondents: {
                             update: {
                                 where: { id: respondentData.id },
-                                data: { data }
+                                data: data
                             }
                         }
                     }
