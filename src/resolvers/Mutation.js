@@ -70,21 +70,29 @@ const Mutation = {
                 id
                 slug
                 name
-                isPrivate
-                isReadOnly
+                interval
                 areResponsesHidden
                 startTime
                 endTime
                 dates
-                interval
+                isPrivate
+                isReadOnly
                 respondents {
+                    id
                     anonymousName
                     user {
-                        name
+                        id
+                        uid
                         email
+                        name
+                        isPremium
+                        createdAt
                     }
-                    response
                     role
+                    response
+                    isKeyRespondent
+                    createdAt
+                    updatedAt
                 }
                 createdAt
                 updatedAt
@@ -230,13 +238,33 @@ const Mutation = {
             fragment EditRespondentsOnShow on Show {
                 id
                 slug
+                name
+                interval
+                areResponsesHidden
+                startTime
+                endTime
+                dates
+                isPrivate
+                isReadOnly
                 respondents {
                     id
+                    anonymousName
                     user {
+                        id
+                        uid
                         email
+                        name
+                        isPremium
+                        createdAt
                     }
                     role
+                    response
+                    isKeyRespondent
+                    createdAt
+                    updatedAt
                 }
+                createdAt
+                updatedAt
             }
             `
 
@@ -298,13 +326,32 @@ const Mutation = {
                 id
                 slug
                 name
+                interval
+                areResponsesHidden
+                startTime
+                endTime
+                dates
+                isPrivate
+                isReadOnly
                 respondents {
                     id
+                    anonymousName
                     user {
+                        id
+                        uid
                         email
+                        name
+                        isPremium
+                        createdAt
                     }
                     role
+                    response
+                    isKeyRespondent
+                    createdAt
+                    updatedAt
                 }
+                createdAt
+                updatedAt
             }
             `
             // check if current requesting user is admin of current show
@@ -387,13 +434,33 @@ const Mutation = {
             fragment DeleteRespondentsOnShow on Show {
                 id
                 slug
+                name
+                interval
+                areResponsesHidden
+                startTime
+                endTime
+                dates
+                isPrivate
+                isReadOnly
                 respondents {
                     id
+                    anonymousName
                     user {
+                        id
+                        uid
                         email
+                        name
+                        isPremium
+                        createdAt
                     }
                     role
+                    response
+                    isKeyRespondent
+                    createdAt
+                    updatedAt
                 }
+                createdAt
+                updatedAt
             }
             `
 
@@ -701,6 +768,7 @@ const Mutation = {
                     }
                     role
                     response
+                    isKeyRespondent
                     createdAt
                     updatedAt
                 }
@@ -853,6 +921,8 @@ const Mutation = {
                     id
                     anonymousName
                     user {
+                        id
+                        uid
                         email
                         name
                         isPremium
@@ -860,6 +930,7 @@ const Mutation = {
                     }
                     role
                     response
+                    isKeyRespondent
                     createdAt
                     updatedAt
                 }
