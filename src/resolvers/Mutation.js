@@ -162,7 +162,7 @@ const Mutation = {
 
                 return editShowWithAdmin
             } else {
-                const showData = _.omit(data, ['isReadOnly', 'isPrivate', 'areResponsesHidden'])
+                var showData = _.omit(data, ['isReadOnly', 'isPrivate', 'areResponsesHidden'])
 
                 if (showData.dates) {
                     showData = _.update(showData, 'dates', function (a) { return { set: a } })
@@ -170,7 +170,7 @@ const Mutation = {
 
                 const editShowWithoutAdmin = await prisma.updateShow({
                     where: { slug: where.slug },
-                    data: data
+                    data: showData
                 })
 
                 return editShowWithoutAdmin
