@@ -674,15 +674,33 @@ const Mutation = {
             fragment DeleteResponseOnShow on Show {
                 id
                 slug
-                isReadOnly
+                name
+                interval
+                areResponsesHidden
+                startTime
+                endTime
+                dates
                 isPrivate
+                isReadOnly
                 respondents {
                     id
+                    anonymousName
                     user {
+                        id
+                        uid
                         email
+                        name
+                        isPremium
+                        createdAt
                     }
                     role
+                    response
+                    isKeyRespondent
+                    createdAt
+                    updatedAt
                 }
+                createdAt
+                updatedAt
             }
             `
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
