@@ -90,6 +90,9 @@ const Mutation = {
                 updatedAt
             }
             `
+            if (data.dates.length == 0) {
+                throw new Error("UnprocessableEntityError: at least one date must be chosen")
+            }
             // if auth exists, means that the user must be verified before being
             // able to create a show
             data = _.update(data, "dates", function (a) { return { set: a } })
@@ -152,6 +155,9 @@ const Mutation = {
                 }
 
                 if (data.dates) {
+                    if (data.dates.length == 0) {
+                        throw new Error("UnprocessableEntityError: at least one date must be chosen")
+                    }
                     data = _.update(data, 'dates', function (a) { return { set: a } })
                 }
 
@@ -165,6 +171,9 @@ const Mutation = {
                 var showData = _.omit(data, ['isReadOnly', 'isPrivate', 'areResponsesHidden'])
 
                 if (showData.dates) {
+                    if (showData.dates.length == 0) {
+                        throw new Error("UnprocessableEntityError: at least one date must be chosen")
+                    }
                     showData = _.update(showData, 'dates', function (a) { return { set: a } })
                 }
 
