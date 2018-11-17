@@ -53,6 +53,10 @@ const Query = {
             `
             const show = await prisma.show({ slug: where.slug }).$fragment(fragment)
 
+            if (!show) {
+                return null
+            }
+
             // if show is private must check if there's a user with the name inside
             if (show.isPrivate) {
                 const user = await authenticate.verifyUser(auth.token, auth.uid)

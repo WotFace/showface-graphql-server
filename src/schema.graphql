@@ -123,6 +123,7 @@ input CreateNewShowInput {
   dates: [DateTime!]
   startTime: DateTime!
   endTime: DateTime!
+  isPrivate: Boolean
   interval: Int!
 }
 
